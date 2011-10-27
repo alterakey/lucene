@@ -3,8 +3,9 @@ README
 
 Copyright (C) 2011 Takahiro Yoshimura <altakey@gmail.com>
 
-This is a image viewing application with tracing aid.  You can turn
-your tablet to tracing lightbox.  It is also my learning project.
+This is another scribbling application for Android platform (2.2 and
+up.)  You can use it for quick scribbling in an Android-powered
+easy presentation session.  It is also my learning project.
 
 
 0. HOW TO BUILD
@@ -27,8 +28,27 @@ It is available at: https://gist.github.com/1223663 .
 1. FEATURES
 =============
 
- * Ability to show image
- * Ability to fix image against swipes
- * Ability to adjust brightness
- * Ability to trim and zoom over fullscreen
+ * Ability to directly scribble on live applications
 
+
+2. BUGS
+=========
+
+ * OpenGL based application can stop when drawing mode is active
+
+ * May lose points if you are moving fast enough
+
+ * Pen color choices are lacking
+
+ * Drop color is not configurable
+
+ * UI is in Japanese only
+
+   Translation efforts, in any form, will be welcomed.
+
+
+3. ACKNOWLEDGES
+=================
+
+Icon is from the Nuovo theme, is work of SILVESTREHERRERA
+(http://www.silvestre.com.ar/?p=5.)
