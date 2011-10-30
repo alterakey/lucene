@@ -9,42 +9,35 @@ import android.content.res.Resources;
 import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.*;
+import android.webkit.*;
 import java.io.*;
 
 public class ImageLoader
 {
 	Intent intent;
-	ImageView view;
+	WebView view;
 
-	public ImageLoader(ImageView v, Intent intent)
+	public ImageLoader(WebView v, Intent intent)
 	{
 		this.view = v;
 		this.intent = intent;
 	}
 
-	public static ImageLoader create(ImageView v, Intent intent)
+	public static ImageLoader create(WebView v, Intent intent)
 	{
 		return new ImageLoader(v, intent);
 	}
 
 	public void load()
 	{
-		Resources res = this.view.getContext().getResources();
+		final String mimeType = "text/html";
+		final String encoding = "utf-8";
+		String html = String.format("<img src=\"%s\" />", this.getUri().toString());
 
-		try
-		{
-			InputStream in = this.read();
-			BitmapDrawable bitmap = new BitmapDrawable(res, in);
-			this.view.setImageDrawable(bitmap);
-		}
-		catch (FileNotFoundException e)
-		{
-			BitmapDrawable bitmap = new BitmapDrawable(res);
-			this.view.setImageDrawable(bitmap);
-		}
+		this.view.loadDataWithBaseURL("fake://not/needed", html, mimeType, encoding, "");
 	}
 
-	private InputStream read() throws FileNotFoundException
+	private Uri getUri()
 	{
 		Context context = this.view.getContext();
 
@@ -52,11 +45,11 @@ public class ImageLoader
 		{
 			Bundle extras = this.intent.getExtras();
 			if (extras.containsKey(Intent.EXTRA_STREAM))
-				return context.getContentResolver().openInputStream((Uri)extras.getParcelable(Intent.EXTRA_STREAM));
+				return (Uri)extras.getParcelable(Intent.EXTRA_STREAM);
 		}
 
 		if (Intent.ACTION_VIEW.equals(this.intent.getAction()))
-			return context.getContentResolver().openInputStream(this.intent.getData());
+			return this.intent.getData();
 
 		return null;
 	}
