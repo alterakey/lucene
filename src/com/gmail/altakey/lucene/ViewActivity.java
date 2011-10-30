@@ -16,6 +16,13 @@ public class ViewActivity extends Activity
         setContentView(R.layout.view);
 
 		WebView v = (WebView)findViewById(R.id.view);
+		v.setOnTouchListener(new View.OnTouchListener() {
+			public boolean onTouch(View v, MotionEvent event)
+			{
+				return true;
+			}
+		});
+
 		v.getSettings().setBuiltInZoomControls(true);
 		v.getSettings().setDisplayZoomControls(false);
 		v.getSettings().setLightTouchEnabled(false);
