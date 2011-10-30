@@ -28,6 +28,7 @@ public class ViewActivity extends Activity
 		v.getSettings().setLightTouchEnabled(false);
 		v.getSettings().setLoadWithOverviewMode(true);
 		v.getSettings().setUseWideViewPort(true);
+		v.getSettings().setLoadWithOverviewMode(true);
 		
 		ImageLoader.create(v, this.getIntent()).load();
     }

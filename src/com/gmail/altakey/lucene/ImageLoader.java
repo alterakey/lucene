@@ -32,7 +32,7 @@ public class ImageLoader
 	{
 		final String mimeType = "text/html";
 		final String encoding = "utf-8";
-		String html = String.format("<img src=\"%s\" />", this.getUri().toString());
+		String html = String.format("<body style=\"text-align: center; background: black\"><img src=\"%s\" /></body>", this.getUri().toString());
 
 		this.view.loadDataWithBaseURL("fake://not/needed", html, mimeType, encoding, "");
 	}
