@@ -19,7 +19,7 @@ public class ViewActivity extends Activity
 		v.setOnTouchListener(new View.OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event)
 			{
-				return true;
+				return false;
 			}
 		});
 
