@@ -24,7 +24,6 @@ public class ViewActivity extends Activity
 		});
 
 		v.getSettings().setBuiltInZoomControls(true);
-		v.getSettings().setDisplayZoomControls(false);
 		v.getSettings().setLightTouchEnabled(false);
 		v.getSettings().setLoadWithOverviewMode(true);
 		v.getSettings().setUseWideViewPort(true);
