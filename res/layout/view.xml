@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-    <WebView
-	android:id="@+id/view"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:scrollbars="none"
+    android:layout_height="fill_parent">
+  <WebView
+      android:id="@+id/view"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:scrollbars="none"
+      />
+  <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:gravity="bottom">
+    <com.google.ads.AdView
+	android:id="@+id/adView"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:gravity="bottom"
+	ads:adUnitId="a14ebe7748e6551"
+	ads:adSize="BANNER"
+	ads:testDevices="TEST_EMULATOR,e78b974e6ab65648b52951e69edcb571"
+	ads:loadAdOnCreate="true"
 	/>
+  </LinearLayout>
 </LinearLayout>

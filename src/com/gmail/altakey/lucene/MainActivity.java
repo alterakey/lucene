@@ -3,6 +3,7 @@ package com.gmail.altakey.lucene;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.*;
+import android.widget.LinearLayout;
 
 public class MainActivity extends Activity
 {
