@@ -23,7 +23,7 @@
 	android:gravity="bottom"
 	ads:adUnitId="a14ebe7748e6551"
 	ads:adSize="BANNER"
-	ads:testDevices="TEST_EMULATOR,e78b974e6ab65648b52951e69edcb571"
+	ads:testDevices="@string/test_devices"
 	ads:loadAdOnCreate="true"
 	/>
   </LinearLayout>
