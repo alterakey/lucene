@@ -83,6 +83,8 @@
     <import file="${sdk.dir}/tools/ant/build.xml" />
 
     <target name="run">
+        <xpath input="AndroidManifest.xml"
+                expression="/manifest/@package" output="manifest.package" />
         <echo>Running ${manifest.package} from the default emulator or device...</echo>
         <exec executable="start-intent.sh" failonerror="true">
 	    <arg value="android.intent.action.MAIN" />
