@@ -60,10 +60,10 @@ public class LayerView extends ImageView
 		return true;
 	}
 
-	private void focus(float ratio)
+	private void focus(PointF focalPoint, float ratio)
 	{
 		Matrix m = new Matrix();
-		m.setScale(ratio, ratio);
+		m.setScale(ratio, ratio, focalPoint.x, focalPoint.y);
 		Log.d("LV.sS", String.format("scaling to: %f", ratio));
 		this.setImageMatrix(m);
 	}
@@ -87,7 +87,7 @@ public class LayerView extends ImageView
 				this.initial = this.now;
 
 			float ratio = this.now / this.initial * this.currentRatio;
-			focus(ratio);
+			focus(new PointF(sgd.getFocusX(), sgd.getFocusY()), ratio);
 		}
 
 		public void end()
