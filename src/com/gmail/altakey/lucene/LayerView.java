@@ -100,7 +100,6 @@ public class LayerView extends ImageView
 
 		public void update(MotionEvent e)
 		{
-			Log.d("LV.PC.update", String.format("translate: %f, %f", e.getX() - this.x, e.getY() - this.y));
 			translate(e.getX() - this.x, e.getY() - this.y);
 			this.x = e.getX();
 			this.y = e.getY();
@@ -125,7 +124,6 @@ public class LayerView extends ImageView
 			float now = sgd.getCurrentSpan();
 
 			float ratio = (now - prev) / prev;
-			Log.d("LV.ZC.update", String.format("ratio: %f", ratio));
 			focus(new PointF(sgd.getFocusX(), sgd.getFocusY()), ratio);
 		}
 
