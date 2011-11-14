@@ -3,8 +3,8 @@ package com.gmail.altakey.lucene;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.*;
+import android.widget.*;
 import android.util.*;
-import android.webkit.WebView;
 
 public class ViewActivity extends Activity
 {
@@ -14,21 +14,8 @@ public class ViewActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view);
-
-		WebView v = (WebView)findViewById(R.id.view);
-		v.setOnTouchListener(new View.OnTouchListener() {
-			public boolean onTouch(View v, MotionEvent event)
-			{
-				return false;
-			}
-		});
-
-		v.getSettings().setBuiltInZoomControls(true);
-		v.getSettings().setLightTouchEnabled(false);
-		v.getSettings().setLoadWithOverviewMode(true);
-		v.getSettings().setUseWideViewPort(true);
-		v.getSettings().setLoadWithOverviewMode(true);
 		
+		ImageView v = (ImageView)findViewById(R.id.view);
 		ImageLoader.create(v, this.getIntent()).load();
     }
 }
