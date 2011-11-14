@@ -26,17 +26,13 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		this.view = (ImageView)findViewById(R.id.view);
 		this.zc = new ZoomController(this.view);
 		this.pc = new PanController(this.view);
+		this.sgd = new ScaleGestureDetector(this, this);
 
-		ImageLoader.create(this.view, this.getIntent()).load();
-		this.init();
-    }
-
-	private void init()
-	{
 		this.view.setImageMatrix(new Matrix());
 		this.view.setOnTouchListener(this);
-		this.sgd = new ScaleGestureDetector(this, this);
-	}
+
+		ImageLoader.create(this.view, this.getIntent()).load();
+    }
 
 	public boolean onTouch(View v, MotionEvent e)
 	{
