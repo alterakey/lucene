@@ -60,7 +60,7 @@ public class LayerView extends ImageView
 		return true;
 	}
 
-	private void setScale(float ratio)
+	private void focus(float ratio)
 	{
 		Matrix m = new Matrix();
 		m.setScale(ratio, ratio);
@@ -87,7 +87,7 @@ public class LayerView extends ImageView
 				this.initial = this.now;
 
 			float ratio = this.now / this.initial * this.currentRatio;
-			setScale(ratio);
+			focus(ratio);
 		}
 
 		public void end()
