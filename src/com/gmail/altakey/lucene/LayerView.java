@@ -33,21 +33,21 @@ public class LayerView extends ImageView
 			public boolean onScale(ScaleGestureDetector detector)
 			{
 				Log.d("LV.OSGL.oS", String.format("scale: %f", detector.getCurrentSpan()));
-				zc.update(detector.getCurrentSpan());
+				zc.update(detector);
 				return true;
 			}
 
 			public boolean onScaleBegin(ScaleGestureDetector detector)
 			{
 				Log.d("LV.OSGL.oSB", String.format("scale begin: %f", detector.getCurrentSpan()));
-				zc.begin(detector.getCurrentSpan());
+				zc.begin(detector);
 				return true;
 			}
 
 			public void onScaleEnd(ScaleGestureDetector detector)
 			{
 				Log.d("LV.OSGL.oSE", String.format("scale end: %f", detector.getCurrentSpan()));
-				zc.update(detector.getCurrentSpan());
+				zc.update(detector);
 				zc.end();
 			}
 		});
@@ -74,15 +74,15 @@ public class LayerView extends ImageView
 		private float now;
 		private float currentRatio = 1.0f;
 
-		public void begin(float span)
+		public void begin(ScaleGestureDetector sgd)
 		{
-			this.initial = span;
+			this.initial = sgd.getCurrentSpan();
 			this.now = 0.0f;
 		}
 
-		public void update(float span)
+		public void update(ScaleGestureDetector sgd)
 		{
-			this.now = span;
+			this.now = sgd.getCurrentSpan();
 			if (this.initial == 0.0f)
 				this.initial = this.now;
 
