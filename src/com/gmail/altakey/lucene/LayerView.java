@@ -89,17 +89,27 @@ public class LayerView extends ImageView
 
 	private class PanController
 	{
+		private float x;
+		private float y;
+
 		public void begin(MotionEvent e)
 		{
+			this.x = e.getX();
+			this.y = e.getY();
 		}
 
 		public void update(MotionEvent e)
 		{
-			translate(e.getX() - e.getHistoricalX(0), e.getY() - e.getHistoricalY(0));
+			Log.d("LV.PC.update", String.format("translate: %f, %f", e.getX() - this.x, e.getY() - this.y));
+			translate(e.getX() - this.x, e.getY() - this.y);
+			this.x = e.getX();
+			this.y = e.getY();
 		}
 
 		public void end()
 		{
+			this.x = 0.0f;
+			this.y = 0.0f;
 		}
 	}
 
