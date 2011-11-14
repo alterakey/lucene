@@ -57,21 +57,18 @@ public class ViewActivity extends Activity
 		this.sgd = new ScaleGestureDetector(this, new ScaleGestureDetector.OnScaleGestureListener() {
 			public boolean onScale(ScaleGestureDetector detector)
 			{
-				Log.d("VA.OSGL.oS", String.format("scale: %f", detector.getCurrentSpan()));
 				zc.update(detector);
 				return true;
 			}
 
 			public boolean onScaleBegin(ScaleGestureDetector detector)
 			{
-				Log.d("VA.OSGL.oSB", String.format("scale begin: %f", detector.getCurrentSpan()));
 				zc.begin(detector);
 				return true;
 			}
 
 			public void onScaleEnd(ScaleGestureDetector detector)
 			{
-				Log.d("VA.OSGL.oSE", String.format("scale end: %f", detector.getCurrentSpan()));
 				zc.update(detector);
 				zc.end();
 			}
