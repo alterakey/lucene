@@ -30,8 +30,8 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 
 		this.view.setImageMatrix(new Matrix());
 		this.view.setOnTouchListener(this);
-
-		ImageLoader.create(this.view, this.getIntent()).load();
+		
+		AsyncImageLoader.create(this.view, this.getIntent()).execute();
     }
 
 	public boolean onTouch(View v, MotionEvent e)

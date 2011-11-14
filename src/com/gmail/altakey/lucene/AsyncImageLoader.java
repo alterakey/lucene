@@ -1,6 +1,8 @@
 package com.gmail.altakey.lucene;
 
 import android.os.Bundle;
+import android.os.AsyncTask;
+import android.app.ProgressDialog;
 import android.widget.*;
 import android.view.*;
 import android.util.*;
@@ -11,23 +13,42 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.*;
 import java.io.*;
 
-public class ImageLoader
+public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 {
 	Intent intent;
 	ImageView view;
+	ProgressDialog progress;
 
-	public ImageLoader(ImageView v, Intent intent)
+	public AsyncImageLoader(ImageView v, Intent intent)
 	{
 		this.view = v;
 		this.intent = intent;
 	}
 
-	public static ImageLoader create(ImageView v, Intent intent)
+	public static AsyncImageLoader create(ImageView v, Intent intent)
 	{
-		return new ImageLoader(v, intent);
+		return new AsyncImageLoader(v, intent);
 	}
 
-	public void load()
+	protected void onPreExecute()
+	{
+		this.progress = new ProgressDialog(this.view.getContext());
+		this.progress.setTitle("Loading");
+		this.progress.setMessage("Please wait...");
+		this.progress.show();
+	}
+
+	protected void onProgressUpdate(Void... args)
+	{
+	}
+
+	protected void onPostExecute(BitmapDrawable bitmap)
+	{
+		this.view.setImageDrawable(bitmap);
+		this.progress.dismiss();
+	}
+
+	protected BitmapDrawable doInBackground(Void... args)
 	{
 		Resources res = this.view.getContext().getResources();
 
@@ -35,12 +56,12 @@ public class ImageLoader
 		{
 			InputStream in = this.read();
 			BitmapDrawable bitmap = new BitmapDrawable(res, in);
-			this.view.setImageDrawable(bitmap);
+			return bitmap;
 		}
 		catch (FileNotFoundException e)
 		{
 			BitmapDrawable bitmap = new BitmapDrawable(res);
-			this.view.setImageDrawable(bitmap);
+			return bitmap;
 		}
 	}
 
