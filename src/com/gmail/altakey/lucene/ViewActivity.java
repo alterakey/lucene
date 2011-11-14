@@ -11,8 +11,8 @@ import java.util.*;
 public class ViewActivity extends Activity
 {
 	private ScaleGestureDetector sgd;
-	private ZoomController zc = new ZoomController();
-	private PanController pc = new PanController();
+	private ZoomController zc;
+	private PanController pc;
 
 	private ImageView view;
 
@@ -24,24 +24,12 @@ public class ViewActivity extends Activity
         setContentView(R.layout.view);
 
 		this.view = (ImageView)findViewById(R.id.view);
-		ImageLoader.create(this.view, this.getIntent()).load();
+		this.zc = new ZoomController(this.view);
+		this.pc = new PanController(this.view);
 
+		ImageLoader.create(this.view, this.getIntent()).load();
 		this.init();
     }
-
-	private void focus(PointF focalPoint, float ratioDelta)
-	{
-		Matrix m = new Matrix(this.view.getImageMatrix());
-		m.postScale(1.0f + ratioDelta, 1.0f + ratioDelta, focalPoint.x, focalPoint.y);
-		this.view.setImageMatrix(m);
-	}
-
-	private void translate(float dx, float dy)
-	{
-		Matrix m = new Matrix(this.view.getImageMatrix());
-		m.postTranslate(dx, dy);
-		this.view.setImageMatrix(m);
-	}
 
 	private void init()
 	{
@@ -92,8 +80,14 @@ public class ViewActivity extends Activity
 
 	private class PanController
 	{
+		private ImageView view;
 		private float x;
 		private float y;
+
+		public PanController(ImageView view)
+		{
+			this.view = view;
+		}
 
 		public void begin(MotionEvent e)
 		{
@@ -103,7 +97,7 @@ public class ViewActivity extends Activity
 
 		public void update(MotionEvent e)
 		{
-			translate(e.getX() - this.x, e.getY() - this.y);
+			this.apply(e.getX() - this.x, e.getY() - this.y);
 			this.x = e.getX();
 			this.y = e.getY();
 		}
@@ -113,10 +107,24 @@ public class ViewActivity extends Activity
 			this.x = 0.0f;
 			this.y = 0.0f;
 		}
+
+		private void apply(float dx, float dy)
+		{
+			Matrix m = new Matrix(this.view.getImageMatrix());
+			m.postTranslate(dx, dy);
+			this.view.setImageMatrix(m);
+		}
 	}
 
 	private class ZoomController
 	{
+		private ImageView view;
+
+		public ZoomController(ImageView view)
+		{
+			this.view = view;
+		}
+
 		public void begin(ScaleGestureDetector sgd)
 		{
 		}
@@ -127,11 +135,18 @@ public class ViewActivity extends Activity
 			float now = sgd.getCurrentSpan();
 
 			float ratio = (now - prev) / prev;
-			focus(new PointF(sgd.getFocusX(), sgd.getFocusY()), ratio);
+			this.apply(new PointF(sgd.getFocusX(), sgd.getFocusY()), ratio);
 		}
 
 		public void end()
 		{
+		}
+
+		private void apply(PointF focalPoint, float ratioDelta)
+		{
+			Matrix m = new Matrix(this.view.getImageMatrix());
+			m.postScale(1.0f + ratioDelta, 1.0f + ratioDelta, focalPoint.x, focalPoint.y);
+			this.view.setImageMatrix(m);
 		}
 	}
 }
