@@ -15,6 +15,7 @@ public class LayerView extends ImageView
 {
 	private ScaleGestureDetector sgd;
 	private ZoomController zc = new ZoomController();
+	private PanController pc = new PanController();
 
 	public LayerView(Context context) {
 		super(context);
@@ -57,6 +58,18 @@ public class LayerView extends ImageView
 	public boolean onTouchEvent(MotionEvent e)
 	{
 		sgd.onTouchEvent(e);
+		switch (e.getActionMasked())
+		{
+		case MotionEvent.ACTION_DOWN:
+			this.pc.begin(e);
+			break;
+		case MotionEvent.ACTION_MOVE:
+			this.pc.update(e);
+			break;
+		case MotionEvent.ACTION_UP:
+			this.pc.end();
+			break;
+		}
 		return true;
 	}
 
@@ -66,6 +79,45 @@ public class LayerView extends ImageView
 		m.setScale(ratio, ratio, focalPoint.x, focalPoint.y);
 		Log.d("LV.sS", String.format("scaling to: %f", ratio));
 		this.setImageMatrix(m);
+	}
+
+	private void translate(float x, float y)
+	{
+		Matrix m = new Matrix(this.getImageMatrix());
+		m.setTranslate(x, y);
+		Log.d("LV.translate", String.format("translate: %f, %f", x, y));
+		this.setImageMatrix(m);
+	}
+
+	private class PanController
+	{
+		private PointF origin = new PointF();
+		private PointF currentPoint = new PointF();
+
+		public void begin(MotionEvent e)
+		{
+			this.origin.x = e.getX();
+			this.origin.y = e.getY();
+		}
+
+		public void update(MotionEvent e)
+		{
+			if (this.origin.x == 0.0f && this.origin.y == 0.0f)
+				this.begin(e);
+
+			translate(e.getX() - this.origin.x + this.currentPoint.x, e.getY() - this.origin.y + this.currentPoint.y);
+		}
+
+		public void end()
+		{
+			this.origin.x = 0.0f;
+			this.origin.y = 0.0f;
+
+			float[] mv = new float[9];
+			getImageMatrix().getValues(mv);
+			this.currentPoint.x = mv[Matrix.MTRANS_X];
+			this.currentPoint.y = mv[Matrix.MTRANS_Y];
+		}
 	}
 
 	private class ZoomController
