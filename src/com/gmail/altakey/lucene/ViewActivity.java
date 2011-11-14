@@ -8,7 +8,7 @@ import android.util.*;
 import android.graphics.*;
 import java.util.*;
 
-public class ViewActivity extends Activity
+public class ViewActivity extends Activity implements View.OnTouchListener, ScaleGestureDetector.OnScaleGestureListener
 {
 	private ScaleGestureDetector sgd;
 	private ZoomController zc;
@@ -34,45 +34,44 @@ public class ViewActivity extends Activity
 	private void init()
 	{
 		this.view.setImageMatrix(new Matrix());
-		this.view.setOnTouchListener(new View.OnTouchListener() {
-			public boolean onTouch(View v, MotionEvent e)
-			{
-				sgd.onTouchEvent(e);
-				switch (e.getActionMasked())
-				{
-				case MotionEvent.ACTION_DOWN:
-					pc.begin(e);
-					break;
-				case MotionEvent.ACTION_MOVE:
-					pc.update(e);
-					break;
-				case MotionEvent.ACTION_UP:
-					pc.end();
-					break;
-				}
-				return true;
-			}
-		});
+		this.view.setOnTouchListener(this);
+		this.sgd = new ScaleGestureDetector(this, this);
+	}
 
-		this.sgd = new ScaleGestureDetector(this, new ScaleGestureDetector.OnScaleGestureListener() {
-			public boolean onScale(ScaleGestureDetector detector)
-			{
-				zc.update(detector);
-				return true;
-			}
+	public boolean onTouch(View v, MotionEvent e)
+	{
+		this.sgd.onTouchEvent(e);
+		switch (e.getActionMasked())
+		{
+		case MotionEvent.ACTION_DOWN:
+			this.pc.begin(e);
+			break;
+		case MotionEvent.ACTION_MOVE:
+			this.pc.update(e);
+			break;
+		case MotionEvent.ACTION_UP:
+			this.pc.end();
+			break;
+		}
+		return true;
+	}
 
-			public boolean onScaleBegin(ScaleGestureDetector detector)
-			{
-				zc.begin(detector);
-				return true;
-			}
-
-			public void onScaleEnd(ScaleGestureDetector detector)
-			{
-				zc.update(detector);
-				zc.end();
-			}
-		});
+	public boolean onScale(ScaleGestureDetector detector)
+	{
+		this.zc.update(detector);
+		return true;
+	}
+	
+	public boolean onScaleBegin(ScaleGestureDetector detector)
+	{
+		this.zc.begin(detector);
+		return true;
+	}
+	
+	public void onScaleEnd(ScaleGestureDetector detector)
+	{
+		this.zc.update(detector);
+		this.zc.end();
 	}
 
 	private class PanController
