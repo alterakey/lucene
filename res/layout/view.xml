@@ -9,7 +9,7 @@
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
       android:layout_weight="1"
-      android:scaleType="centerInside" />
+      android:scaleType="matrix" />
   <com.google.ads.AdView
       xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
       android:id="@+id/adView"
