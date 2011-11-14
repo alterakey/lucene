@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-  <com.gmail.altakey.lucene.LayerView
+  <ImageView
       android:id="@+id/view"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
