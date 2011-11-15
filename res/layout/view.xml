@@ -18,6 +18,6 @@
       android:gravity="bottom"
       ads:adUnitId="a14ebe7748e6551"
       ads:adSize="BANNER"
-      ads:testDevices="@string/test_devices"
-      ads:loadAdOnCreate="true" />
+      ads:visilbility="GONE"
+      ads:loadAdOnCreate="false" />
 </LinearLayout>

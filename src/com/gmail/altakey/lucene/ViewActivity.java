@@ -1,13 +1,18 @@
 package com.gmail.altakey.lucene;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.*;
 import android.widget.*;
 import android.util.*;
 import android.graphics.*;
+import android.preference.PreferenceManager;
+import android.content.SharedPreferences;
 import java.util.*;
+
+import com.google.ads.*;
 
 public class ViewActivity extends Activity implements View.OnTouchListener, ScaleGestureDetector.OnScaleGestureListener
 {
@@ -16,6 +21,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 	private PanController pc;
 
 	private ImageView view;
+	private AdLoader adLoader;
 
     /** Called when the activity is first created. */
     @Override
@@ -25,6 +31,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
         setContentView(R.layout.view);
 
 		this.view = (ImageView)findViewById(R.id.view);
+		this.adLoader = new AdLoader(this, (ViewGroup)this.view.getRootView());
 		this.zc = new ZoomController(this.view);
 		this.pc = new PanController(this.view);
 		this.sgd = new ScaleGestureDetector(this, this);
@@ -32,8 +39,16 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		this.view.setImageMatrix(new Matrix());
 		this.view.setOnTouchListener(this);
 		
+		this.adLoader.load();
 		AsyncImageLoader.create(this.view, this.getIntent()).execute();
     }
+
+    @Override
+    public void onResume()
+    {
+		super.onResume();
+		this.adLoader.load();
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
