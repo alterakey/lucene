@@ -31,7 +31,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
         setContentView(R.layout.view);
 
 		this.view = (ImageView)findViewById(R.id.view);
-		this.adLoader = new AdLoader(this, (ViewGroup)this.view.getRootView());
+		this.adLoader = new AdLoader(this);
 		this.zc = new ZoomController(this.view);
 		this.pc = new PanController(this.view);
 		this.sgd = new ScaleGestureDetector(this, this);
