@@ -8,6 +8,7 @@ import android.view.*;
 import android.widget.*;
 import android.util.*;
 import android.graphics.*;
+import android.graphics.drawable.BitmapDrawable;
 import android.preference.PreferenceManager;
 import android.content.SharedPreferences;
 import java.util.*;
@@ -19,6 +20,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 	private ScaleGestureDetector sgd;
 	private ZoomController zc;
 	private PanController pc;
+	private RotateController rc;
 
 	private ImageView view;
 	private AdLoader adLoader;
@@ -34,6 +36,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		this.adLoader = new AdLoader(this);
 		this.zc = new ZoomController(this.view);
 		this.pc = new PanController(this.view);
+		this.rc = new RotateController(this.view);
 		this.sgd = new ScaleGestureDetector(this, this);
 
 		this.view.setImageMatrix(new Matrix());
@@ -79,12 +82,21 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		{
 		case MotionEvent.ACTION_DOWN:
 			this.pc.begin(e);
+			this.rc.begin(e);
+			break;
+		case MotionEvent.ACTION_POINTER_DOWN:
+			this.rc.down(e);
+			break;
+		case MotionEvent.ACTION_POINTER_UP:
+			this.rc.up(e);
 			break;
 		case MotionEvent.ACTION_MOVE:
 			this.pc.update(e);
+			this.rc.update(e);
 			break;
 		case MotionEvent.ACTION_UP:
 			this.pc.end();
+			this.rc.end();
 			break;
 		}
 		return true;
@@ -106,6 +118,120 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 	{
 		this.zc.update(detector);
 		this.zc.end();
+	}
+
+	private class RotateController
+	{
+		private static final int UNLOCKED = -1;
+		private static final float UNDETERMINED = 999.0f;
+
+		private ImageView view;
+		private PointF[] points = new PointF[2];
+		private int pivot_id = UNLOCKED;
+		private int pointer_id = UNLOCKED;
+		private float angle = UNDETERMINED;
+
+		public RotateController(ImageView view)
+		{
+			this.view = view;
+			this.points[0] = new PointF();
+			this.points[1] = new PointF();
+		}
+
+		public void begin(MotionEvent e)
+		{
+			this.down(e);
+		}
+
+		public void update(MotionEvent e)
+		{
+			if (this.pivot_id != UNLOCKED && this.pointer_id != UNLOCKED)
+			{
+				int pivot_index = e.findPointerIndex(this.pivot_id);
+				int pointer_index = e.findPointerIndex(this.pointer_id);
+
+				this.points[0].x = e.getX(pivot_index);
+				this.points[0].y = e.getY(pivot_index);
+				this.points[1].x = e.getX(pointer_index);
+				this.points[1].y = e.getY(pointer_index);
+
+				float angle = this.findAngle();
+				PointF pivot = this.findPivot();
+				
+				if (this.angle != UNDETERMINED)
+					this.apply(pivot, angle - this.angle);
+				
+				this.angle = angle;
+			}
+		}
+
+		public void down(MotionEvent e)
+		{
+			int index = e.getActionIndex();
+			int id = e.getPointerId(index);
+			if (this.pivot_id == UNLOCKED)
+			{
+				this.pivot_id = id;
+				this.points[0].x = e.getX(index);
+				this.points[0].y = e.getY(index);
+			}
+			else if (this.pointer_id == UNLOCKED)
+			{
+				this.pointer_id = id;
+				this.points[1].x = e.getX(index);
+				this.points[1].y = e.getY(index);
+			}
+		}
+
+		public void up(MotionEvent e)
+		{
+			int id = e.getPointerId(e.getActionIndex());
+			if (this.pivot_id == id)
+			{
+				this.pivot_id = UNLOCKED;
+				this.angle = UNDETERMINED;
+			}
+
+			if (this.pointer_id == id)
+			{
+				this.pointer_id = UNLOCKED;
+				this.angle = UNDETERMINED;
+			}			
+		}
+
+		public void end()
+		{
+			this.angle = UNDETERMINED;
+			this.pivot_id = UNLOCKED;
+			this.pointer_id = UNLOCKED;
+		}
+
+		private void apply(PointF pivot, float dtheta)
+		{
+			Matrix m = new Matrix(this.view.getImageMatrix());
+			if (dtheta > 270)
+				dtheta -= 360;
+			if (dtheta < -270)
+				dtheta += 360;
+
+			m.postRotate(dtheta, pivot.x, pivot.y);
+			this.view.setImageMatrix(m);
+		}
+
+		private float findAngle()
+		{
+			final double RAD_TO_DEG = 180/Math.PI;
+			PointF vector = new PointF(this.points[1].x - this.points[0].x, this.points[1].y - this.points[0].y);			
+			return (float)(Math.atan2(vector.y, vector.x) * RAD_TO_DEG);
+		}
+
+		private PointF findPivot()
+		{
+			return new PointF(
+				(this.points[1].x + this.points[0].x) / 2,
+				(this.points[1].y + this.points[0].y) / 2
+			);
+		}
 	}
 
 	private class PanController
