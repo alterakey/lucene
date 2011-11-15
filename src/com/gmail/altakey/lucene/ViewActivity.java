@@ -34,6 +34,14 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		AsyncImageLoader.create(this.view, this.getIntent()).execute();
     }
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) 
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.view, menu);
+		return true;
+	}
+
 	public boolean onTouch(View v, MotionEvent e)
 	{
 		this.sgd.onTouchEvent(e);
