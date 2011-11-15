@@ -2,6 +2,7 @@ package com.gmail.altakey.lucene;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.content.Intent;
 import android.view.*;
 import android.widget.*;
 import android.util.*;
@@ -47,6 +48,9 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 	{
 		switch (item.getItemId())
 		{
+		case R.id.menu_preferences:
+			startActivity(new Intent(this, ConfigActivity.class));
+			return true;
 		case R.id.menu_close:
 			this.finish();
 		}
