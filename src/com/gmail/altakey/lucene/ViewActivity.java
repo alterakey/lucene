@@ -42,6 +42,17 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
+		switch (item.getItemId())
+		{
+		case R.id.menu_close:
+			this.finish();
+		}
+		return true;
+	}
+
 	public boolean onTouch(View v, MotionEvent e)
 	{
 		this.sgd.onTouchEvent(e);
