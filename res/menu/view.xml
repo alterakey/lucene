@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_flip_horizontal"
+          android:title="左右反転" />
+    <item android:id="@+id/menu_flip_vertical"
+          android:title="上下反転" />
+    <item android:id="@+id/menu_preferences"
+	  android:icon="@android:drawable/ic_menu_preferences"
+          android:title="設定" />
+    <item android:id="@+id/menu_close"
+	  android:icon="@android:drawable/ic_menu_close_clear_cancel"
+          android:title="アプリの終了" />
+</menu>
