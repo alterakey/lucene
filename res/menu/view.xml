@@ -7,6 +7,9 @@
     <item android:id="@+id/menu_preferences"
 	  android:icon="@android:drawable/ic_menu_preferences"
           android:title="設定" />
+    <item android:id="@+id/menu_toggle_lock"
+	  android:icon="@android:drawable/ic_lock_lock"
+          android:title="ロック" />
     <item android:id="@+id/menu_close"
 	  android:icon="@android:drawable/ic_menu_close_clear_cancel"
           android:title="アプリの終了" />
