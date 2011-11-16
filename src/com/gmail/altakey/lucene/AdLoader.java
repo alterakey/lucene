@@ -25,19 +25,26 @@ public class AdLoader
 		return new AdLoader(activity);
 	}
 
-	public boolean isEnabled()
+	public void load()
+	{
+		this.load(false);
+	}
+
+	public void load(boolean locked)
 	{
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this.activity);
 
-		return pref.getBoolean("show_ad", true);
-	}
-
-	public void load()
-	{
-		if (this.isEnabled())
-			this.show();
+		if (pref.getBoolean("show_ad", true))
+		{
+			if (locked && pref.getBoolean("hide_ad_on_lock", false))
+				this.hide();
+			else
+				this.show();
+		}
 		else
+		{
 			this.hide();
+		}
 	}
 
 	public void show()

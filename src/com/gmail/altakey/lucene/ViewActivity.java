@@ -46,7 +46,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		this.view.setImageMatrix(new Matrix());
 		this.view.setOnTouchListener(this);
 		
-		this.adLoader.load();
+		this.adLoader.load(this.locked);
 		AsyncImageLoader.create(this.view, this.getIntent()).execute();
     }
 
@@ -54,7 +54,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
     public void onResume()
     {
 		super.onResume();
-		this.adLoader.load();
+		this.adLoader.load(this.locked);
 	}
 
 	@Override
@@ -75,6 +75,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 			return true;
 		case R.id.menu_toggle_lock:
 			this.locked = !this.locked;
+			this.adLoader.load(this.locked);
 			return true;
 		case R.id.menu_close:
 			this.finish();

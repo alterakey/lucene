@@ -6,6 +6,10 @@
             android:key="show_ad"
             android:title="広告を表示する"
 	    android:defaultValue="true" />
+    <CheckBoxPreference
+            android:key="hide_ad_on_lock"
+            android:title="ロック中は広告を隠す"
+	    android:defaultValue="false" />
     <Preference
 	android:title="Lightboxdroid バージョン"
 	android:summary="@string/app_version" />
