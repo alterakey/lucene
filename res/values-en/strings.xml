@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_loading_title">Loading</string>
+    <string name="dialog_loading_message">Please wait...</string>
+    <string name="toast_locked">Screen is locked.\nYou can unlock it with the Back key, or via option menu.</string>
+    <string name="toast_unlocked">Screen is unlocked.</string>
+</resources>

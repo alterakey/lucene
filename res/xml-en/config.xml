@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+        android:key="first_preferencescreen">
+    <CheckBoxPreference
+            android:key="show_ad"
+            android:title="Show advertisements"
+	    android:defaultValue="true" />
+    <CheckBoxPreference
+            android:key="hide_ad_on_lock"
+            android:title="Hide ads on lock"
+	    android:defaultValue="true" />
+    <Preference
+	android:title="Lightboxdroid version"
+	android:summary="@string/app_version" />
+</PreferenceScreen> 
