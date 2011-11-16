@@ -30,6 +30,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 
 	private ImageView view;
 	private AdLoader adLoader;
+	private BrightnessLock brightnessLock = new BrightnessLock(this);
 
     /** Called when the activity is first created. */
     @Override
@@ -61,31 +62,24 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		else
 			this.unlock();
 	}
-
+	
 	private void lock()
 	{
-		WindowManager.LayoutParams lp = this.getWindow().getAttributes();
-		lp.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-		lp.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
-		this.getWindow().setAttributes(lp);
-
+		this.brightnessLock.hold();
+		
 		this.locked = true;
 		this.adLoader.load(this.locked);
 		Toast.makeText(this, R.string.toast_locked, Toast.LENGTH_SHORT).show();
 	}
-
+	
 	private void unlock()
 	{
-		WindowManager.LayoutParams lp = this.getWindow().getAttributes();
-		lp.flags &= ~WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-		lp.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
-		this.getWindow().setAttributes(lp);
-
+		this.brightnessLock.release();
+		
 		this.locked = false;
 		this.adLoader.load(this.locked);
 		Toast.makeText(this, R.string.toast_unlocked, Toast.LENGTH_SHORT).show();
 	}
-
 
     @Override
     public void onResume()
