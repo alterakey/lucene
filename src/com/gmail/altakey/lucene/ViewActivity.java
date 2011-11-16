@@ -125,6 +125,23 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		return true;
 	}
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)
+	{
+		switch (keyCode)
+		{
+		case KeyEvent.KEYCODE_BACK:
+			if (this.locked)
+			{
+				this.unlock();
+				return true;
+			}
+			break;
+		}
+
+		return super.onKeyDown(keyCode, event);
+	}
+
 	public boolean onTouch(View v, MotionEvent e)
 	{
 		if (this.locked)
