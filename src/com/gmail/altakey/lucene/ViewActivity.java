@@ -19,6 +19,8 @@ import com.gmail.altakey.lucene.motion.*;
 
 public class ViewActivity extends Activity implements View.OnTouchListener, ScaleGestureDetector.OnScaleGestureListener
 {
+	private boolean locked;
+
 	private ScaleGestureDetector sgd;
 	private ZoomController zc;
 	private PanController pc;
@@ -71,6 +73,9 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		case R.id.menu_preferences:
 			startActivity(new Intent(this, ConfigActivity.class));
 			return true;
+		case R.id.menu_toggle_lock:
+			this.locked = !this.locked;
+			return true;
 		case R.id.menu_close:
 			this.finish();
 		}
@@ -79,6 +84,9 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 
 	public boolean onTouch(View v, MotionEvent e)
 	{
+		if (this.locked)
+			return true;
+
 		this.sgd.onTouchEvent(e);
 		switch (e.getActionMasked())
 		{
