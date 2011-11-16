@@ -97,9 +97,23 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.view, menu);
+		this.inflateMenu(menu);
 		return true;
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu)
+	{
+		super.onPrepareOptionsMenu(menu);
+		this.inflateMenu(menu);
+		return true;
+	}
+
+	private void inflateMenu(Menu menu)
+	{
+		MenuInflater inflater = getMenuInflater();
+		menu.clear();
+		inflater.inflate(this.locked ? R.menu.view_locked : R.menu.view, menu);
 	}
 
 	@Override
