@@ -62,6 +62,6 @@ public class AdLoader
 	{
 		AdView adView = (AdView)this.activity.findViewById(R.id.adView);
 		adView.stopLoading();
-		adView.setVisibility(View.GONE);
+		adView.setVisibility(View.INVISIBLE);
 	}
 }
