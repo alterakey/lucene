@@ -54,6 +54,29 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		AsyncImageLoader.create(this.view, this.getIntent()).execute();
     }
 
+	private void toggleLock()
+	{
+		if (!this.locked)
+			this.lock();
+		else
+			this.unlock();
+	}
+
+	private void lock()
+	{
+		this.locked = true;
+		this.adLoader.load(this.locked);
+		Toast.makeText(this, R.string.toast_locked, Toast.LENGTH_SHORT).show();
+	}
+
+	private void unlock()
+	{
+		this.locked = false;
+		this.adLoader.load(this.locked);
+		Toast.makeText(this, R.string.toast_unlocked, Toast.LENGTH_SHORT).show();
+	}
+
+
     @Override
     public void onResume()
     {
@@ -84,8 +107,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 			startActivity(new Intent(this, ConfigActivity.class));
 			return true;
 		case R.id.menu_toggle_lock:
-			this.locked = !this.locked;
-			this.adLoader.load(this.locked);
+			this.toggleLock();
 			return true;
 		case R.id.menu_close:
 			this.finish();
