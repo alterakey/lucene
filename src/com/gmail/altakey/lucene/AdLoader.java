@@ -36,7 +36,7 @@ public class AdLoader
 
 		if (pref.getBoolean("show_ad", true))
 		{
-			if (locked && pref.getBoolean("hide_ad_on_lock", false))
+			if (locked && pref.getBoolean("hide_ad_on_lock", true))
 				this.hide();
 			else
 				this.show();
