@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MainActivity</string>
+    <string name="app_name">Lightboxdroid</string>
     <string name="app_version">0.1.0</string>
     <string name="test_device">5EFA0B934D161A3E579486F2CD21B1E6</string>
     <string name="dialog_loading_title">Loading</string>
