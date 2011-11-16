@@ -140,38 +140,4 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		this.zc.update(detector);
 		this.zc.end();
 	}
-
-	private class HorizontalFlipController
-	{
-		private ImageView view;
-
-		public HorizontalFlipController(ImageView view)
-		{
-			this.view = view;
-		}
-
-		public void toggle()
-		{
-			Matrix m = new Matrix(this.view.getImageMatrix());
-			m.postScale(-1, 1, this.view.getWidth() / 2, this.view.getHeight() / 2);
-			this.view.setImageMatrix(m);
-		}
-	}
-
-	private class VerticalFlipController
-	{
-		private ImageView view;
-
-		public VerticalFlipController(ImageView view)
-		{
-			this.view = view;
-		}
-
-		public void toggle()
-		{
-			Matrix m = new Matrix(this.view.getImageMatrix());
-			m.postScale(1, -1, this.view.getWidth() / 2, this.view.getHeight() / 2);
-			this.view.setImageMatrix(m);
-		}
-	}
 }
