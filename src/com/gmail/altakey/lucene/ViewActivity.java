@@ -236,7 +236,10 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 
 	private class PanController
 	{
+		private static final int UNLOCKED = -1;
+
 		private ImageView view;
+		private int pointer_id = UNLOCKED;
 		private float x;
 		private float y;
 
@@ -247,19 +250,36 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 
 		public void begin(MotionEvent e)
 		{
-			this.x = e.getX();
-			this.y = e.getY();
+			if (this.pointer_id == UNLOCKED)
+			{
+				int index = e.getActionIndex();
+				this.pointer_id = e.getPointerId(index);
+				this.x = e.getX(index);
+				this.y = e.getY(index);
+			}
 		}
 
 		public void update(MotionEvent e)
 		{
-			this.apply(e.getX() - this.x, e.getY() - this.y);
-			this.x = e.getX();
-			this.y = e.getY();
+			if (this.pointer_id != UNLOCKED)
+			{
+				int index = e.findPointerIndex(this.pointer_id);
+				try
+				{
+					this.apply(e.getX(index) - this.x, e.getY(index) - this.y);
+					this.x = e.getX(index);
+					this.y = e.getY(index);
+				}
+				catch (IndexOutOfBoundsException exc)
+				{
+					return;
+				}
+			}
 		}
 
 		public void end()
 		{
+			this.pointer_id = UNLOCKED;
 			this.x = 0.0f;
 			this.y = 0.0f;
 		}
