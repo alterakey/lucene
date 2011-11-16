@@ -32,9 +32,10 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 
 	protected void onPreExecute()
 	{
-		this.progress = new ProgressDialog(this.view.getContext());
-		this.progress.setTitle("Loading");
-		this.progress.setMessage("Please wait...");
+		Context context = this.view.getContext();
+		this.progress = new ProgressDialog(context);
+		this.progress.setTitle(context.getString(R.string.dialog_loading_title));
+		this.progress.setMessage(context.getString(R.string.dialog_loading_message));
 		this.progress.show();
 	}
 
