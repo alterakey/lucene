@@ -21,6 +21,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 {
 	private boolean locked;
 
+	private GestureDetector gd;
 	private ScaleGestureDetector sgd;
 	private ZoomController zc;
 	private PanController pc;
@@ -50,6 +51,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		this.rc = new RotateController(this.view);
 		this.hfc = new HorizontalFlipController(this.view);
 		this.vfc = new VerticalFlipController(this.view);
+		this.gd = new GestureDetector(this, new RevertGestureListener());
 		this.sgd = new ScaleGestureDetector(this, this);
 
 		this.view.setImageMatrix(new Matrix());
@@ -161,6 +163,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		if (this.locked)
 			return true;
 
+		this.gd.onTouchEvent(e);
 		this.sgd.onTouchEvent(e);
 		switch (e.getActionMasked())
 		{
@@ -202,5 +205,15 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 	{
 		this.zc.update(detector);
 		this.zc.end();
+	}
+
+	private class RevertGestureListener extends GestureDetector.SimpleOnGestureListener
+	{
+		@Override
+		public boolean onDoubleTap(MotionEvent e)
+		{
+			view.setImageMatrix(new Matrix());
+			return true;
+		}
 	}
 }
