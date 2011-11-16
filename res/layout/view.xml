@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
+<RelativeLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
@@ -8,16 +8,15 @@
       android:id="@+id/view"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
-      android:layout_weight="1"
       android:scaleType="matrix" />
   <com.google.ads.AdView
       xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
       android:id="@+id/adView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="right|bottom"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentBottom="true"
       ads:adUnitId="a14ebe7748e6551"
       ads:adSize="BANNER"
-      ads:visilbility="GONE"
       ads:loadAdOnCreate="false" />
-</LinearLayout>
+</RelativeLayout>

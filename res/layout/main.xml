@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_layout"
     android:orientation="vertical"
@@ -9,7 +9,6 @@
   <TextView
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_weight="1"
     android:text="タブレットでトレースを行なうためのアプリです。\n画像をギャラリーなどから共有したり、ファイルマネージャなどで読み込んで下さい。"
     />
   <com.google.ads.AdView
@@ -17,9 +16,10 @@
       android:id="@+id/adView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="right|bottom"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentBottom="true"
       ads:adUnitId="a14ebe7748e6551"
       ads:adSize="BANNER"
       ads:loadAdOnCreate="false" />
-</LinearLayout>
+</RelativeLayout>
 
