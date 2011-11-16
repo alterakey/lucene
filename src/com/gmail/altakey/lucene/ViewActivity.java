@@ -30,6 +30,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 
 	private ImageView view;
 	private AdLoader adLoader;
+	private TitleBarController titleBarController = new TitleBarController(this);
 	private BrightnessLock brightnessLock = new BrightnessLock(this);
 
     /** Called when the activity is first created. */
@@ -37,6 +38,9 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+		this.titleBarController.onCreate();
+
         setContentView(R.layout.view);
 
 		this.view = (ImageView)findViewById(R.id.view);
@@ -65,6 +69,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 	
 	private void lock()
 	{
+		this.titleBarController.hide();
 		this.brightnessLock.hold();
 		
 		this.locked = true;
@@ -74,6 +79,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 	
 	private void unlock()
 	{
+		this.titleBarController.show();
 		this.brightnessLock.release();
 		
 		this.locked = false;
