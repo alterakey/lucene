@@ -25,6 +25,8 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 	private ZoomController zc;
 	private PanController pc;
 	private RotateController rc;
+	private HorizontalFlipController hfc;
+	private VerticalFlipController vfc;
 
 	private ImageView view;
 	private AdLoader adLoader;
@@ -41,6 +43,8 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		this.zc = new ZoomController(this.view);
 		this.pc = new PanController(this.view);
 		this.rc = new RotateController(this.view);
+		this.hfc = new HorizontalFlipController(this.view);
+		this.vfc = new VerticalFlipController(this.view);
 		this.sgd = new ScaleGestureDetector(this, this);
 
 		this.view.setImageMatrix(new Matrix());
@@ -70,6 +74,12 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 	{
 		switch (item.getItemId())
 		{
+		case R.id.menu_flip_horizontal:
+			this.hfc.toggle();
+			return true;
+		case R.id.menu_flip_vertical:
+			this.vfc.toggle();
+			return true;
 		case R.id.menu_preferences:
 			startActivity(new Intent(this, ConfigActivity.class));
 			return true;
@@ -129,5 +139,39 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 	{
 		this.zc.update(detector);
 		this.zc.end();
+	}
+
+	private class HorizontalFlipController
+	{
+		private ImageView view;
+
+		public HorizontalFlipController(ImageView view)
+		{
+			this.view = view;
+		}
+
+		public void toggle()
+		{
+			Matrix m = new Matrix(this.view.getImageMatrix());
+			m.postScale(-1, 1, this.view.getWidth() / 2, this.view.getHeight() / 2);
+			this.view.setImageMatrix(m);
+		}
+	}
+
+	private class VerticalFlipController
+	{
+		private ImageView view;
+
+		public VerticalFlipController(ImageView view)
+		{
+			this.view = view;
+		}
+
+		public void toggle()
+		{
+			Matrix m = new Matrix(this.view.getImageMatrix());
+			m.postScale(1, -1, this.view.getWidth() / 2, this.view.getHeight() / 2);
+			this.view.setImageMatrix(m);
+		}
 	}
 }
