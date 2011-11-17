@@ -3,8 +3,18 @@
     <string name="app_name">Lightboxdroid</string>
     <string name="app_version">0.1.0</string>
     <string name="test_device">5EFA0B934D161A3E579486F2CD21B1E6</string>
+    <string name="config_title_show_ad">広告を表示する</string>
+    <string name="config_title_hide_ad_on_lock">ロック中は広告を隠す</string>
+    <string name="config_title_app_version">Lightboxdroid バージョン</string>
+    <string name="menu_preferences">設定</string>
+    <string name="menu_view_flip_horizontal">左右反転</string>
+    <string name="menu_view_flip_vertical">上下反転</string>
+    <string name="menu_view_lock">ロック</string>
+    <string name="menu_view_unlock">ロック解除</string>
+    <string name="menu_view_close">アプリの終了</string>
     <string name="dialog_loading_title">Loading</string>
     <string name="dialog_loading_message">Please wait...</string>
     <string name="toast_locked">ロックしました。\nバックキーまたはメニューから解除できます。</string>
+    <string name="toast_locked_no_menu">ロックしました。\nバックキーまたはメニューから解除できます。</string>
     <string name="toast_unlocked">ロックを解除しました。</string>
 </resources>

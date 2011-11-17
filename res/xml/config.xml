@@ -4,13 +4,13 @@
         android:key="first_preferencescreen">
     <CheckBoxPreference
             android:key="show_ad"
-            android:title="広告を表示する"
+            android:title="@string/config_title_show_ad"
 	    android:defaultValue="true" />
     <CheckBoxPreference
             android:key="hide_ad_on_lock"
-            android:title="ロック中は広告を隠す"
+            android:title="@string/config_title_hide_ad_on_lock"
 	    android:defaultValue="true" />
     <Preference
-	android:title="Lightboxdroid バージョン"
+	android:title="@string/config_title_app_version"
 	android:summary="@string/app_version" />
 </PreferenceScreen> 
