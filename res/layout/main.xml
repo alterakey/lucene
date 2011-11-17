@@ -9,7 +9,7 @@
   <TextView
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:text="タブレットでトレースを行なうためのアプリです。\n画像をギャラリーなどから共有したり、ファイルマネージャなどで読み込んで下さい。"
+    android:text="@string/main_inst"
     />
   <com.google.ads.AdView
       xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"

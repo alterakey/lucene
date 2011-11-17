@@ -3,6 +3,7 @@
     <string name="config_title_show_ad">広告を表示する</string>
     <string name="config_title_hide_ad_on_lock">ロック中は広告を隠す</string>
     <string name="config_title_app_version">Lightboxdroid バージョン</string>
+    <string name="main_inst">タブレットでトレースを行なうためのアプリです。\n画像をギャラリーなどから共有したり、ファイルマネージャなどで読み込んで下さい。</string>
     <string name="menu_preferences">設定</string>
     <string name="menu_view_flip_horizontal">左右反転</string>
     <string name="menu_view_flip_vertical">上下反転</string>
