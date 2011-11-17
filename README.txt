@@ -25,8 +25,6 @@ This is tracing helper application for tablet devices.
 
    Translation efforts, in any form, will be welcomed.
 
- * Source code access is not open (yet)
-
 
 3. ACKNOWLEDGES
 =================
