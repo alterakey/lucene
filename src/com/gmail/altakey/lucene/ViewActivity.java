@@ -212,7 +212,17 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		@Override
 		public boolean onDoubleTap(MotionEvent e)
 		{
-			view.setImageMatrix(new Matrix());
+			ImageView view = ViewActivity.this.view;
+			int imageWidth = view.getDrawable().getIntrinsicWidth();
+			int imageHeight = view.getDrawable().getIntrinsicHeight();
+
+			Matrix m = new Matrix();
+
+			RectF drawable = new RectF(0, 0, imageWidth, imageHeight);
+			RectF viewport = new RectF(0, 0, view.getWidth(), view.getHeight());
+			m.setRectToRect(drawable, viewport, Matrix.ScaleToFit.CENTER);
+
+			view.setImageMatrix(m);
 			return true;
 		}
 	}
