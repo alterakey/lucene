@@ -58,7 +58,12 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		this.view.setOnTouchListener(this);
 		
 		this.adLoader.load(this.locked);
-		AsyncImageLoader.create(this.view, this.getIntent()).execute();
+		AsyncImageLoader.create(this.view, this.getIntent(), new AsyncImageLoader.Callback() {
+			public void onComplete()
+			{
+				ViewActivity.this.revertTransform();
+			}
+		}).execute();
     }
 
 	private void toggleLock()
@@ -207,22 +212,26 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		this.zc.end();
 	}
 
+	private void revertTransform()
+	{
+		int imageWidth = view.getDrawable().getIntrinsicWidth();
+		int imageHeight = view.getDrawable().getIntrinsicHeight();
+
+		Matrix m = new Matrix();
+
+		RectF drawable = new RectF(0, 0, imageWidth, imageHeight);
+		RectF viewport = new RectF(0, 0, view.getWidth(), view.getHeight());
+		m.setRectToRect(drawable, viewport, Matrix.ScaleToFit.CENTER);
+		
+		view.setImageMatrix(m);
+	}
+
 	private class RevertGestureListener extends GestureDetector.SimpleOnGestureListener
 	{
 		@Override
 		public boolean onDoubleTap(MotionEvent e)
 		{
-			ImageView view = ViewActivity.this.view;
-			int imageWidth = view.getDrawable().getIntrinsicWidth();
-			int imageHeight = view.getDrawable().getIntrinsicHeight();
-
-			Matrix m = new Matrix();
-
-			RectF drawable = new RectF(0, 0, imageWidth, imageHeight);
-			RectF viewport = new RectF(0, 0, view.getWidth(), view.getHeight());
-			m.setRectToRect(drawable, viewport, Matrix.ScaleToFit.CENTER);
-
-			view.setImageMatrix(m);
+			ViewActivity.this.revertTransform();
 			return true;
 		}
 	}
