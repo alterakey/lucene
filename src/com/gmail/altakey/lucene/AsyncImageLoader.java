@@ -11,6 +11,8 @@ import android.content.res.Resources;
 import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.*;
+import android.net.http.AndroidHttpClient;
+import org.apache.http.client.methods.HttpGet;
 import java.io.*;
 
 public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
@@ -89,6 +91,22 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 			Bundle extras = this.intent.getExtras();
 			if (extras.containsKey(Intent.EXTRA_STREAM))
 				return context.getContentResolver().openInputStream((Uri)extras.getParcelable(Intent.EXTRA_STREAM));
+			if (extras.containsKey(Intent.EXTRA_TEXT))
+			{
+				try
+				{
+					HttpGet req = new HttpGet(extras.getCharSequence(Intent.EXTRA_TEXT).toString());
+					return AndroidHttpClient.newInstance("Lightboxdroid/0.1.2").execute(req).getEntity().getContent();
+				}
+				catch (IllegalArgumentException e)
+				{
+					return null;
+				}
+				catch (IOException e)
+				{
+					return null;
+				}
+			}
 		}
 
 		if (Intent.ACTION_VIEW.equals(this.intent.getAction()))
