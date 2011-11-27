@@ -46,19 +46,31 @@ import java.io.*;
 
 public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 {
+	public interface Callback
+	{
+		public void onComplete();
+	}
+	
 	Intent intent;
 	ImageView view;
 	ProgressDialog progress;
+	AsyncImageLoader.Callback cb;
 
-	public AsyncImageLoader(ImageView v, Intent intent)
+	public AsyncImageLoader(ImageView v, Intent intent, AsyncImageLoader.Callback cb)
 	{
 		this.view = v;
 		this.intent = intent;
+		this.cb = cb;
 	}
 
 	public static AsyncImageLoader create(ImageView v, Intent intent)
 	{
-		return new AsyncImageLoader(v, intent);
+		return create(v, intent, null);
+	}
+
+	public static AsyncImageLoader create(ImageView v, Intent intent, AsyncImageLoader.Callback cb)
+	{
+		return new AsyncImageLoader(v, intent, cb);
 	}
 
 	protected void onPreExecute()
@@ -77,6 +89,8 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 	protected void onPostExecute(BitmapDrawable bitmap)
 	{
 		this.view.setImageDrawable(bitmap);
+		if (this.cb != null)
+			this.cb.onComplete();
 		this.progress.dismiss();
 	}
 
