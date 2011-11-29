@@ -41,7 +41,7 @@ public class PanController
 				this.x = e.getX(index);
 				this.y = e.getY(index);
 			}
-			catch (IndexOutOfBoundsException exc)
+			catch (IllegalArgumentException exc)
 			{
 				return;
 			}
