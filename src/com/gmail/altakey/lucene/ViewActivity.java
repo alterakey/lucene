@@ -63,6 +63,10 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 			{
 				ViewActivity.this.revertTransform();
 			}
+			public void onError()
+			{
+				finish();
+			}
 		}).execute();
     }
 

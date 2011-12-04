@@ -20,6 +20,7 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 	public interface Callback
 	{
 		public void onComplete();
+		public void onError();
 	}
 	
 	Intent intent;
@@ -69,9 +70,17 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 
 	protected void onPostExecute(BitmapDrawable bitmap)
 	{
-		this.view.setImageDrawable(bitmap);
-		if (this.cb != null)
-			this.cb.onComplete();
+		if (bitmap != null)
+		{
+			this.view.setImageDrawable(bitmap);
+			if (this.cb != null)
+				this.cb.onComplete();
+		}
+		else
+		{
+			if (this.cb != null)
+				this.cb.onError();
+		}
 		this.progress.dismiss();
 		this.httpClient.close();
 	}
@@ -80,7 +89,6 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 	{
 		Context context = this.view.getContext();
 		Resources res = context.getResources();
-		BitmapDrawable empty = new BitmapDrawable(res);
 
 		try
 		{
@@ -90,12 +98,12 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 		}
 		catch (FileNotFoundException e)
 		{
-			return empty;
+			return null;
 		}
 		catch (OutOfMemoryError e)
 		{
 			this.oomMessage.show();
-			return empty;
+			return null;
 		}
 	}
 
