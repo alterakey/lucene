@@ -25,6 +25,7 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 	Intent intent;
 	ImageView view;
 	ProgressDialog progress;
+	Toast oomMessage;
 	AndroidHttpClient httpClient;
 	AsyncImageLoader.Callback cb;
 
@@ -49,6 +50,7 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 	{
 		Context context = this.view.getContext();
 		this.httpClient = AndroidHttpClient.newInstance(this.getUserAgent());
+		this.oomMessage = Toast.makeText(context, R.string.toast_out_of_memory, Toast.LENGTH_SHORT);
 		this.progress = new ProgressDialog(context);
 		this.progress.setTitle(context.getString(R.string.dialog_loading_title));
 		this.progress.setMessage(context.getString(R.string.dialog_loading_message));
@@ -76,7 +78,9 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 
 	protected BitmapDrawable doInBackground(Void... args)
 	{
-		Resources res = this.view.getContext().getResources();
+		Context context = this.view.getContext();
+		Resources res = context.getResources();
+		BitmapDrawable empty = new BitmapDrawable(res);
 
 		try
 		{
@@ -86,8 +90,12 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 		}
 		catch (FileNotFoundException e)
 		{
-			BitmapDrawable bitmap = new BitmapDrawable(res);
-			return bitmap;
+			return empty;
+		}
+		catch (OutOfMemoryError e)
+		{
+			this.oomMessage.show();
+			return empty;
 		}
 	}
 

@@ -17,4 +17,5 @@
     <string name="dialog_loading_message">Please wait...</string>
     <string name="toast_locked">Screen is locked.\nYou can unlock it with the Back key, or via option menu.</string>
     <string name="toast_unlocked">Screen is unlocked.</string>
+    <string name="toast_out_of_memory">Image is too large.</string>
 </resources>
