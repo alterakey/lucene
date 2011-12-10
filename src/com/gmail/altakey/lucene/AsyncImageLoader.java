@@ -22,19 +22,31 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 		public void onComplete();
 		public void onError();
 	}
+
+	private final static Callback NullCallback = new Callback()
+	{
+		public void onComplete()
+		{
+		}
+
+		public void onError()
+		{
+		}
+	};
 	
 	Intent intent;
 	ImageView view;
 	ProgressDialog progress;
 	Toast oomMessage;
 	AndroidHttpClient httpClient;
-	AsyncImageLoader.Callback cb;
+	AsyncImageLoader.Callback cb = NullCallback;
 
 	public AsyncImageLoader(ImageView v, Intent intent, AsyncImageLoader.Callback cb)
 	{
 		this.view = v;
 		this.intent = intent;
-		this.cb = cb;
+		if (cb != null)
+			this.cb = cb;
 	}
 
 	public static AsyncImageLoader create(ImageView v, Intent intent)
@@ -73,13 +85,11 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 		if (bitmap != null)
 		{
 			this.view.setImageDrawable(bitmap);
-			if (this.cb != null)
-				this.cb.onComplete();
+			this.cb.onComplete();
 		}
 		else
 		{
-			if (this.cb != null)
-				this.cb.onError();
+			this.cb.onError();
 		}
 		this.progress.dismiss();
 		this.httpClient.close();
@@ -115,13 +125,13 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 		{
 			Bundle extras = this.intent.getExtras();
 			if (extras.containsKey(Intent.EXTRA_STREAM))
-				return context.getContentResolver().openInputStream((Uri)extras.getParcelable(Intent.EXTRA_STREAM));
+				return new BitmapInputStream(context.getContentResolver().openInputStream((Uri)extras.getParcelable(Intent.EXTRA_STREAM)));
 			if (extras.containsKey(Intent.EXTRA_TEXT))
 			{
 				try
 				{
 					HttpGet req = new HttpGet(extras.getCharSequence(Intent.EXTRA_TEXT).toString());
-					return this.httpClient.execute(req).getEntity().getContent();
+					return new BitmapInputStream(this.httpClient.execute(req).getEntity().getContent());
 				}
 				catch (IllegalArgumentException e)
 				{
@@ -135,8 +145,57 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 		}
 
 		if (Intent.ACTION_VIEW.equals(this.intent.getAction()))
-			return context.getContentResolver().openInputStream(this.intent.getData());
+			return new BitmapInputStream(context.getContentResolver().openInputStream(this.intent.getData()));
 
 		return null;
+	}
+
+
+	private static class BitmapInputStream extends FilterInputStream
+	{
+		private int marked = 0;
+		private long position = 0;
+
+		public BitmapInputStream(InputStream in)
+		{
+			super(in);
+		}
+
+		@Override
+		public int read(byte[] buffer, int offset, int count) throws IOException
+		{
+			int advanced = super.read(buffer, offset, count);
+			this.position += advanced;
+			this.report();
+			return advanced;
+		}
+
+		@Override
+		public synchronized void reset() throws IOException
+		{
+			super.reset();
+			this.position = this.marked;
+		}
+
+		@Override
+		public synchronized void mark(int readlimit)
+		{
+			super.mark(readlimit);
+			this.marked = readlimit;
+		}
+
+		@Override
+		public long skip(long byteCount) throws IOException
+		{
+			long advanced = super.skip(byteCount);
+			this.position += advanced;
+			this.report();
+			return advanced;
+		}
+
+		private void report()
+		{
+			Log.d("BIS", String.format("BIS.report: at %d", this.position));
+		}
 	}
 }
