@@ -15,7 +15,7 @@ import android.net.http.AndroidHttpClient;
 import org.apache.http.client.methods.HttpGet;
 import java.io.*;
 
-public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
+public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 {
 	public interface Callback
 	{
@@ -66,6 +66,7 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 		this.oomMessage = Toast.makeText(context, R.string.toast_out_of_memory, Toast.LENGTH_SHORT);
 		this.progress = new ProgressDialog(context);
 		this.progress.setTitle(context.getString(R.string.dialog_loading_title));
+		this.progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		this.progress.setMessage(context.getString(R.string.dialog_loading_message));
 		this.progress.show();
 	}
@@ -76,8 +77,20 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 		return String.format("%s/%s", context.getString(R.string.app_name), context.getString(R.string.app_version));
 	}
 
-	protected void onProgressUpdate(Void... args)
+	protected void onProgressUpdate(Long... args)
 	{
+		int at = args[0].intValue();
+		int size = args[1].intValue();
+		boolean indeterminate = (size <= 0);
+
+		this.progress.setIndeterminate(indeterminate);
+		if (!indeterminate)
+		{
+			this.progress.setMax(size / 1024);
+			this.progress.setProgress(at / 1024);
+		}
+		else
+			this.progress.setProgress(0);
 	}
 
 	protected void onPostExecute(BitmapDrawable bitmap)
@@ -102,7 +115,12 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 
 		try
 		{
-			InputStream in = this.read();
+			InputStream in = this.read(new BitmapInputStream.ProgressListener() {
+				public void onAdvance(long at, long size)
+				{
+					publishProgress(at, size);
+				}
+			});
 			BitmapDrawable bitmap = new BitmapDrawable(res, in);
 			return bitmap;
 		}
@@ -119,19 +137,24 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 
 	private InputStream read() throws FileNotFoundException
 	{
+		return this.read(null);
+	}
+
+	private InputStream read(BitmapInputStream.ProgressListener listener) throws FileNotFoundException
+	{
 		Context context = this.view.getContext();
 
 		if (Intent.ACTION_SEND.equals(this.intent.getAction()))
 		{
 			Bundle extras = this.intent.getExtras();
 			if (extras.containsKey(Intent.EXTRA_STREAM))
-				return new BitmapInputStream(context.getContentResolver().openInputStream((Uri)extras.getParcelable(Intent.EXTRA_STREAM)));
+				return new BitmapInputStream(context.getContentResolver().openInputStream((Uri)extras.getParcelable(Intent.EXTRA_STREAM)), listener);
 			if (extras.containsKey(Intent.EXTRA_TEXT))
 			{
 				try
 				{
 					HttpGet req = new HttpGet(extras.getCharSequence(Intent.EXTRA_TEXT).toString());
-					return new BitmapInputStream(this.httpClient.execute(req).getEntity().getContent());
+					return new BitmapInputStream(this.httpClient.execute(req).getEntity().getContent(), listener);
 				}
 				catch (IllegalArgumentException e)
 				{
@@ -145,7 +168,7 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 		}
 
 		if (Intent.ACTION_VIEW.equals(this.intent.getAction()))
-			return new BitmapInputStream(context.getContentResolver().openInputStream(this.intent.getData()));
+			return new BitmapInputStream(context.getContentResolver().openInputStream(this.intent.getData()), listener);
 
 		return null;
 	}
@@ -153,12 +176,19 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 
 	private static class BitmapInputStream extends FilterInputStream
 	{
+		public interface ProgressListener
+		{
+			void onAdvance(long at, long length);
+		}
+
 		private int marked = 0;
 		private long position = 0;
+		private ProgressListener listener;
 
-		public BitmapInputStream(InputStream in)
+		public BitmapInputStream(InputStream in, ProgressListener listener)
 		{
 			super(in);
+			this.listener = listener;
 		}
 
 		@Override
@@ -195,13 +225,16 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 
 		private void report()
 		{
+			if (this.listener == null)
+				return;
+
 			try
 			{
-				Log.d("BIS", String.format("BIS.report: at %d/%d", this.position, this.position + this.in.available()));
+				this.listener.onAdvance(this.position, this.position + this.in.available());
 			}
 			catch (IOException e)
 			{
-				Log.d("BIS", String.format("BIS.report: at %d", this.position));
+				this.listener.onAdvance(this.position, 0);
 			}
 		}
 	}
