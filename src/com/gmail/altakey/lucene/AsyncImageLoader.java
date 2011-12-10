@@ -195,7 +195,14 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 
 		private void report()
 		{
-			Log.d("BIS", String.format("BIS.report: at %d", this.position));
+			try
+			{
+				Log.d("BIS", String.format("BIS.report: at %d/%d", this.position, this.position + this.in.available()));
+			}
+			catch (IOException e)
+			{
+				Log.d("BIS", String.format("BIS.report: at %d", this.position));
+			}
 		}
 	}
 }
