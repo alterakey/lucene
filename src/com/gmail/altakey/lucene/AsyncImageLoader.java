@@ -10,6 +10,7 @@ import android.content.*;
 import android.content.res.Resources;
 import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.*;
 import android.net.http.AndroidHttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -69,6 +70,8 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 		this.progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		this.progress.setMessage(context.getString(R.string.dialog_loading_message));
 		this.progress.show();
+
+		ImageUnloader.unload(this.view);
 	}
 
 	private String getUserAgent()
