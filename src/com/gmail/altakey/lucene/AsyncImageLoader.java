@@ -124,8 +124,12 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 					publishProgress(at, size);
 				}
 			});
-			BitmapDrawable bitmap = new BitmapDrawable(res, in);
-			return bitmap;
+			BitmapFactory.Options bfo = new BitmapFactory.Options();
+			bfo.inDither = true;
+			bfo.inPreferQualityOverSpeed = true;
+			bfo.inPreferredConfig = Bitmap.Config.RGB_565;
+			Bitmap bitmap = BitmapFactory.decodeStream(in, new Rect(-1,-1,-1,-1), bfo);
+			return new BitmapDrawable(res, bitmap);
 		}
 		catch (FileNotFoundException e)
 		{
