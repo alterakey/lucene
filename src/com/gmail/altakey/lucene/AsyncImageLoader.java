@@ -129,7 +129,7 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 			bfo.inPreferQualityOverSpeed = true;
 			bfo.inPreferredConfig = Bitmap.Config.RGB_565;
 			Bitmap bitmap = BitmapFactory.decodeStream(in, new Rect(-1,-1,-1,-1), bfo);
-			return new BitmapDrawable(res, bitmap);
+			return new BitmapDrawable(res, this.scale(bitmap));
 		}
 		catch (FileNotFoundException e)
 		{
@@ -140,6 +140,27 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 			this.oomMessage.show();
 			return null;
 		}
+	}
+
+	private Bitmap scale(Bitmap src)
+	{
+		int width = src.getWidth();
+		int height = src.getHeight();
+		if (width < 2048 && height < 2048)
+			return src;
+		
+		if (width > height)
+		{
+			height = (int)(height * (2048 / (float)width));
+			width = 2048;
+		}
+		if (width < height)
+		{
+			width = (int)(width * (2048 / (float)height));
+			height = 2048;
+		}
+		Log.d("AIL", String.format("scaling: (%d, %d) -> (%d, %d)", src.getWidth(), src.getHeight(), width, height));
+		return Bitmap.createScaledBitmap(src, width, height, true);		
 	}
 
 	private InputStream read() throws FileNotFoundException
