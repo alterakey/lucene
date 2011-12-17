@@ -56,6 +56,7 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 	Intent intent;
 	ImageView view;
 	ProgressDialog progress;
+	AndroidHttpClient httpClient;
 	AsyncImageLoader.Callback cb;
 
 	public AsyncImageLoader(ImageView v, Intent intent, AsyncImageLoader.Callback cb)
@@ -78,10 +79,17 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 	protected void onPreExecute()
 	{
 		Context context = this.view.getContext();
+		this.httpClient = AndroidHttpClient.newInstance(this.getUserAgent());
 		this.progress = new ProgressDialog(context);
 		this.progress.setTitle(context.getString(R.string.dialog_loading_title));
 		this.progress.setMessage(context.getString(R.string.dialog_loading_message));
 		this.progress.show();
+	}
+
+	private String getUserAgent()
+	{
+		Context context = this.view.getContext();
+		return String.format("%s/%s", context.getString(R.string.app_name), context.getString(R.string.app_version));
 	}
 
 	protected void onProgressUpdate(Void... args)
@@ -94,6 +102,7 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 		if (this.cb != null)
 			this.cb.onComplete();
 		this.progress.dismiss();
+		this.httpClient.close();
 	}
 
 	protected BitmapDrawable doInBackground(Void... args)
@@ -127,7 +136,7 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, BitmapDrawable>
 				try
 				{
 					HttpGet req = new HttpGet(extras.getCharSequence(Intent.EXTRA_TEXT).toString());
-					return AndroidHttpClient.newInstance("Lightboxdroid/0.1.2").execute(req).getEntity().getContent();
+					return this.httpClient.execute(req).getEntity().getContent();
 				}
 				catch (IllegalArgumentException e)
 				{
