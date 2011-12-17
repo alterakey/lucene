@@ -39,6 +39,7 @@ import android.view.*;
 import android.widget.*;
 import android.util.*;
 import android.graphics.*;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.preference.PreferenceManager;
 import android.content.SharedPreferences;
@@ -76,6 +77,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
         setContentView(R.layout.view);
 
 		this.view = (ImageView)findViewById(R.id.view);
+		this.view.setImageDrawable(new ColorDrawable(0x00000000));
 		this.adLoader = new AdLoader(this);
 		this.zc = new ZoomController(this.view);
 		this.pc = new PanController(this.view);
@@ -94,8 +96,12 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 			{
 				ViewActivity.this.revertTransform();
 			}
+			public void onError()
+			{
+				finish();
+			}
 		}).execute();
-    }
+	}
 
 	private void toggleLock()
 	{
@@ -130,6 +136,14 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
     {
 		super.onResume();
 		this.adLoader.load(this.locked);
+	}
+
+
+    @Override
+    public void onDestroy()
+    {
+		super.onDestroy();
+		ImageUnloader.unload(this.view);
 	}
 
 	@Override

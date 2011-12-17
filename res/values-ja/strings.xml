@@ -12,4 +12,5 @@
     <string name="menu_view_close">アプリの終了</string>
     <string name="toast_locked">ロックしました。\nバックキーまたはメニューから解除できます。</string>
     <string name="toast_unlocked">ロックを解除しました。</string>
+    <string name="toast_out_of_memory">画像が大きすぎて取り扱えません。</string>
 </resources>
