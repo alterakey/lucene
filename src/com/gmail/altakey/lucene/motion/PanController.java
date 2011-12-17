@@ -45,6 +45,10 @@ public class PanController
 			{
 				return;
 			}
+			catch (ArrayIndexOutOfBoundsException exc)
+			{
+				return;
+			}
 		}
 	}
 
