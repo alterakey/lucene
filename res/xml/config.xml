@@ -10,6 +10,10 @@
             android:key="hide_ad_on_lock"
             android:title="@string/config_title_hide_ad_on_lock"
 	    android:defaultValue="true" />
+    <CheckBoxPreference
+            android:key="enable_hardware_accel"
+            android:title="@string/config_title_enable_hardware_accel"
+	    android:defaultValue="true" />
     <Preference
 	android:title="@string/config_title_app_version"
 	android:summary="@string/app_version" />
