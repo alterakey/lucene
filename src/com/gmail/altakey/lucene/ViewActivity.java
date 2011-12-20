@@ -61,7 +61,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 	private HorizontalFlipController hfc;
 	private VerticalFlipController vfc;
 
-	private ImageView view;
+	private HWImageView view;
 	private AdLoader adLoader;
 	private TitleBarController titleBarController = new TitleBarController(this);
 	private BrightnessLock brightnessLock = new BrightnessLock(this);
@@ -76,7 +76,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 
         setContentView(R.layout.view);
 
-		this.view = (ImageView)findViewById(R.id.view);
+		this.view = (HWImageView)findViewById(R.id.view);
 		this.view.setImageDrawable(new ColorDrawable(0x00000000));
 		this.adLoader = new AdLoader(this);
 		this.zc = new ZoomController(this.view);
