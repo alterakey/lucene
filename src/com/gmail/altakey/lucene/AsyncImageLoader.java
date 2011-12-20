@@ -36,13 +36,13 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 	};
 	
 	Intent intent;
-	ImageView view;
+	HWImageView view;
 	ProgressDialog progress;
 	Toast oomMessage;
 	AndroidHttpClient httpClient;
 	AsyncImageLoader.Callback cb = NullCallback;
 
-	public AsyncImageLoader(ImageView v, Intent intent, AsyncImageLoader.Callback cb)
+	public AsyncImageLoader(HWImageView v, Intent intent, AsyncImageLoader.Callback cb)
 	{
 		this.view = v;
 		this.intent = intent;
@@ -50,12 +50,12 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 			this.cb = cb;
 	}
 
-	public static AsyncImageLoader create(ImageView v, Intent intent)
+	public static AsyncImageLoader create(HWImageView v, Intent intent)
 	{
 		return create(v, intent, null);
 	}
 
-	public static AsyncImageLoader create(ImageView v, Intent intent, AsyncImageLoader.Callback cb)
+	public static AsyncImageLoader create(HWImageView v, Intent intent, AsyncImageLoader.Callback cb)
 	{
 		return new AsyncImageLoader(v, intent, cb);
 	}
@@ -146,18 +146,22 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 	{
 		int width = src.getWidth();
 		int height = src.getHeight();
-		if (width < 2048 && height < 2048)
+		final int maxWidth = this.view.maxBitmapWidth;
+		final int maxHeight = this.view.maxBitmapHeight;
+		if (maxWidth < 0 || maxHeight < 0)
+			return src;
+		if (width < maxWidth && height < maxHeight)
 			return src;
 		
 		if (width > height)
 		{
-			height = (int)(height * (2048 / (float)width));
-			width = 2048;
+			height = (int)(height * (maxWidth / (float)width));
+			width = maxWidth;
 		}
 		if (width < height)
 		{
-			width = (int)(width * (2048 / (float)height));
-			height = 2048;
+			width = (int)(width * (maxHeight / (float)height));
+			height = maxHeight;
 		}
 		Log.d("AIL", String.format("scaling: (%d, %d) -> (%d, %d)", src.getWidth(), src.getHeight(), width, height));
 		return Bitmap.createScaledBitmap(src, width, height, true);		
