@@ -40,7 +40,7 @@ public class HWImageView extends ImageView
 	protected void onDraw(Canvas canvas)
 	{
 		super.onDraw(canvas);
-		if (!canvas.isHardwareAccelerated())
+		if (!HWAcceleration.isEnabled(canvas))
 		{
 			if (this.maxBitmapWidth > 0 && this.maxBitmapHeight > 0)
 			{
@@ -52,9 +52,48 @@ public class HWImageView extends ImageView
 		{
 			if (this.maxBitmapWidth < 0 || this.maxBitmapHeight < 0)
 			{
-				this.maxBitmapWidth = canvas.getMaximumBitmapWidth();
-				this.maxBitmapHeight = canvas.getMaximumBitmapHeight();
+				this.maxBitmapWidth = HWAcceleration.getMaximumBitmapWidth(canvas);
+				this.maxBitmapHeight = HWAcceleration.getMaximumBitmapHeight(canvas);
 				Log.d("HWIV.oD", String.format("max: (%d, %d)", this.maxBitmapWidth, this.maxBitmapHeight));
+			}
+		}
+	}
+
+	private static class HWAcceleration
+	{
+		public static boolean isEnabled(Canvas canvas)
+		{
+			try
+			{
+				return canvas.isHardwareAccelerated();
+			}
+			catch (NoSuchMethodError e)
+			{
+				return false;
+			}
+		}
+		
+		public static int getMaximumBitmapWidth(Canvas canvas)
+		{
+			try
+			{
+				return canvas.getMaximumBitmapWidth();
+			}
+			catch (NoSuchMethodError e)
+			{
+				return 2048;
+			}
+		}
+		
+		public static int getMaximumBitmapHeight(Canvas canvas)
+		{
+			try
+			{
+				return canvas.getMaximumBitmapHeight();
+			}
+			catch (NoSuchMethodError e)
+			{
+				return 2048;
 			}
 		}
 	}
