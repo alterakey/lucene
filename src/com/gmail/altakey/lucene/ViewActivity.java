@@ -32,6 +32,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 
 	private HWImageView view;
 	private AdLoader adLoader;
+	private Restyler restyler = new Restyler();
 	private TitleBarController titleBarController = new TitleBarController(this);
 	private BrightnessLock brightnessLock = new BrightnessLock(this);
 
@@ -58,7 +59,8 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 
 		this.view.setImageMatrix(new Matrix());
 		this.view.setOnTouchListener(this);
-		
+		this.restyler.soft();
+
 		this.adLoader.load(this.locked);
 		AsyncImageLoader.create(this.view, this.getIntent(), new AsyncImageLoader.Callback() {
 			public void onComplete()
@@ -105,8 +107,8 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
     {
 		super.onResume();
 		this.adLoader.load(this.locked);
+		this.restyler.hard();
 	}
-
 
     @Override
     public void onDestroy()
@@ -247,6 +249,47 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		{
 			ViewActivity.this.revertTransform();
 			return true;
+		}
+	}
+
+	private class Restyler
+	{
+		public void soft()
+		{
+			try
+			{
+				this.restyle();
+			}
+			catch (HWImageView.ActivityRestartRequired e)
+			{
+				Log.d("VA.RS.soft", "Ignoring HWIV.ARR");
+			}
+		}
+
+		public void hard()
+		{
+			try
+			{
+				this.restyle();
+			}
+			catch (HWImageView.ActivityRestartRequired e)
+			{
+				this.restart();
+			}
+		}
+
+		private void restyle() throws HWImageView.ActivityRestartRequired
+		{
+			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(ViewActivity.this);
+			boolean accelerationEnabled = pref.getBoolean("enable_hardware_accel", true);
+			ViewActivity.this.view.setHardwareAcceleration(accelerationEnabled);
+		}
+
+		private void restart()
+		{
+			Intent intent = ViewActivity.this.getIntent();
+			ViewActivity.this.finish();
+			ViewActivity.this.startActivity(intent);
 		}
 	}
 }

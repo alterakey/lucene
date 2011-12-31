@@ -20,8 +20,11 @@ import com.gmail.altakey.lucene.motion.*;
 
 public class HWImageView extends ImageView
 {
-	public int maxBitmapWidth = -1;
-	public int maxBitmapHeight = -1;
+	private static final int SOFTWARE = -1;
+	private static final int UNKNOWN = -2;
+
+	public int maxBitmapWidth = UNKNOWN;
+	public int maxBitmapHeight = UNKNOWN;
 
 	public HWImageView(Context context)
 	{
@@ -40,17 +43,14 @@ public class HWImageView extends ImageView
 	protected void onDraw(Canvas canvas)
 	{
 		super.onDraw(canvas);
-		if (!HWAcceleration.isEnabled(canvas))
+		if (this.maxBitmapWidth == UNKNOWN && this.maxBitmapHeight == UNKNOWN)
 		{
-			if (this.maxBitmapWidth > 0 && this.maxBitmapHeight > 0)
+			if (!HWAcceleration.isEnabled(this))
 			{
-				this.maxBitmapWidth = -1;
-				this.maxBitmapHeight = -1;
+				this.maxBitmapWidth = SOFTWARE;
+				this.maxBitmapHeight = SOFTWARE;
 			}
-		}
-		else
-		{
-			if (this.maxBitmapWidth < 0 || this.maxBitmapHeight < 0)
+			else
 			{
 				this.maxBitmapWidth = HWAcceleration.getMaximumBitmapWidth(canvas);
 				this.maxBitmapHeight = HWAcceleration.getMaximumBitmapHeight(canvas);
@@ -59,13 +59,30 @@ public class HWImageView extends ImageView
 		}
 	}
 
+	public void setHardwareAcceleration(boolean enabled) throws ActivityRestartRequired
+	{
+		int fromType = getLayerType();
+		int toType = enabled ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_SOFTWARE;
+
+		if (fromType != toType)
+		{
+			if (this.maxBitmapWidth != UNKNOWN || this.maxBitmapHeight != UNKNOWN)
+				throw new ActivityRestartRequired();
+		}
+
+		this.maxBitmapWidth = UNKNOWN;
+		this.maxBitmapHeight = UNKNOWN;
+		setLayerType(toType, null);
+		invalidate();
+	}
+
 	private static class HWAcceleration
 	{
-		public static boolean isEnabled(Canvas canvas)
+		public static boolean isEnabled(View view)
 		{
 			try
 			{
-				return canvas.isHardwareAccelerated();
+				return view.isHardwareAccelerated() && (view.getLayerType() != View.LAYER_TYPE_SOFTWARE);
 			}
 			catch (NoSuchMethodError e)
 			{
@@ -96,5 +113,9 @@ public class HWImageView extends ImageView
 				return 2048;
 			}
 		}
+	}
+
+	public static class ActivityRestartRequired extends Exception
+	{
 	}
 }
