@@ -8,6 +8,7 @@
     <string name="config_title_hide_ad_on_lock">Hide ads on lock</string>
     <string name="config_title_enable_hardware_accel">Use GPU</string>
     <string name="config_title_app_version">Lightboxdroid version</string>
+    <string name="config_summary_enable_hardware_accel">Details may become somewhat blurry esp. on huge images</string>
     <string name="menu_preferences">Preferences</string>
     <string name="menu_view_flip_horizontal">Flip Hori.</string>
     <string name="menu_view_flip_vertical">Flip Vert.</string>

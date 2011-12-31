@@ -13,6 +13,7 @@
     <CheckBoxPreference
             android:key="enable_hardware_accel"
             android:title="@string/config_title_enable_hardware_accel"
+	    android:summary="@string/config_summary_enable_hardware_accel"
 	    android:defaultValue="true" />
     <Preference
 	android:title="@string/config_title_app_version"
