@@ -32,8 +32,8 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
 
 	private HWImageView view;
 	private AdLoader adLoader;
+	private FullscreenController fullscreenController;
 	private Restyler restyler = new Restyler();
-	private TitleBarController titleBarController = new TitleBarController(this);
 	private BrightnessLock brightnessLock = new BrightnessLock(this);
 
     /** Called when the activity is first created. */
@@ -42,12 +42,15 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
     {
         super.onCreate(savedInstanceState);
 
-		this.titleBarController.onCreate();
 
         setContentView(R.layout.view);
 
 		this.view = (HWImageView)findViewById(R.id.view);
 		this.view.setImageDrawable(new ColorDrawable(0x00000000));
+
+		this.fullscreenController = new FullscreenController(this.view);
+		this.fullscreenController.onCreate();
+
 		this.adLoader = new AdLoader(this);
 		this.zc = new ZoomController(this.view);
 		this.pc = new PanController(this.view);
@@ -56,6 +59,7 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
 		this.vfc = new VerticalFlipController(this.view);
 		this.gd = new GestureDetector(this, new RevertGestureListener());
 		this.sgd = new ScaleGestureDetector(this, this);
+
 
 		this.view.setImageMatrix(new Matrix());
 		this.view.setOnTouchListener(this);
@@ -84,7 +88,7 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
 	
 	private void lock()
 	{
-		this.titleBarController.hide();
+		this.fullscreenController.activate();
 		this.brightnessLock.hold();
 		
 		this.locked = true;
@@ -94,7 +98,7 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
 	
 	private void unlock()
 	{
-		this.titleBarController.show();
+		this.fullscreenController.deactivate();
 		this.brightnessLock.release();
 		
 		this.locked = false;
