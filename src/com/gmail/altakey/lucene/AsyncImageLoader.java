@@ -126,8 +126,14 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 			});
 			BitmapFactory.Options bfo = new BitmapFactory.Options();
 			bfo.inDither = true;
-			bfo.inPreferQualityOverSpeed = true;
 			bfo.inPreferredConfig = Bitmap.Config.RGB_565;
+			try
+			{
+				bfo.inPreferQualityOverSpeed = true;
+			}
+			catch (NoSuchFieldError e)
+			{
+			}
 			Bitmap bitmap = BitmapFactory.decodeStream(in, new Rect(-1,-1,-1,-1), bfo);
 			return new BitmapDrawable(res, this.scale(bitmap));
 		}
