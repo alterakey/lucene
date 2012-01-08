@@ -92,19 +92,25 @@ public class HWImageView extends ImageView
 
 	public void setHardwareAcceleration(boolean enabled) throws ActivityRestartRequired
 	{
-		int fromType = getLayerType();
-		int toType = enabled ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_SOFTWARE;
-
-		if (fromType != toType)
+		try
 		{
-			if (this.maxBitmapWidth != UNKNOWN || this.maxBitmapHeight != UNKNOWN)
-				throw new ActivityRestartRequired();
+			int fromType = getLayerType();
+			int toType = enabled ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_SOFTWARE;
+			
+			if (fromType != toType)
+			{
+				if (this.maxBitmapWidth != UNKNOWN || this.maxBitmapHeight != UNKNOWN)
+					throw new ActivityRestartRequired();
+			}
+			
+			this.maxBitmapWidth = UNKNOWN;
+			this.maxBitmapHeight = UNKNOWN;
+			setLayerType(toType, null);
+			invalidate();
 		}
-
-		this.maxBitmapWidth = UNKNOWN;
-		this.maxBitmapHeight = UNKNOWN;
-		setLayerType(toType, null);
-		invalidate();
+		catch (NoSuchMethodError e)
+		{
+		}
 	}
 
 	private static class HWAcceleration
