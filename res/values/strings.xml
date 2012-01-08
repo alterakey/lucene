@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Lightboxdroid</string>
-    <string name="app_version">0.1.4</string>
+    <string name="app_version">0.1.5</string>
     <string name="test_device">20CDBFD98EEFC09FCFBC44713DB21E65</string>
     <string name="main_inst">This is tracing helper app for tablet devices.\n\nYou can load or share images from apps like Gallery/file managers.\n\nUSAGE:\n\n1. Load your image with Gallery, file managers, etc.\n2. Pinch/rotate/flip it as you like (flip opts. are in menu. Also, double-tapp should revert image to its initial state.)\n3. Lock the screen from the menu.\n4. Screen go brighter so you can trace on it.\n5. You can unlock the screen with your Back key.\n\nWARNING: Screen will be set maximum brightness and will be kept on during lock.  Please expect quicker battery drainage.</string>
     <string name="config_title_show_ad">Show advertisements</string>
     <string name="config_title_hide_ad_on_lock">Hide ads on lock</string>
+    <string name="config_title_enable_hardware_accel">Use GPU</string>
     <string name="config_title_app_version">Lightboxdroid version</string>
+    <string name="config_summary_enable_hardware_accel">Details may become somewhat blurry esp. on huge images</string>
     <string name="menu_preferences">Preferences</string>
     <string name="menu_view_flip_horizontal">Flip Hori.</string>
     <string name="menu_view_flip_vertical">Flip Vert.</string>

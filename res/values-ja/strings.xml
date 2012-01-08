@@ -3,6 +3,8 @@
     <string name="config_title_show_ad">広告を表示する</string>
     <string name="config_title_hide_ad_on_lock">ロック中は広告を隠す</string>
     <string name="config_title_app_version">Lightboxdroid バージョン</string>
+    <string name="config_title_enable_hardware_accel">描画にGPUを使う</string>
+    <string name="config_summary_enable_hardware_accel">特に大きな画像を取り扱うとき詳細が多少ぼやけることがあります</string>
     <string name="main_inst">タブレットでトレースを行なうためのアプリです。\n画像をギャラリーなどから共有したり、ファイルマネージャなどで読み込んで下さい。\n\n基本的な使い方:\n\n1. ギャラリーやファイルマネージャで画像を読み込みます。\n2. 画像を拡大・縮小・回転・反転などして構図を決めます。（反転はメニューから行なえます。また、ダブルタップすると最初の状態に戻ります。）\n3. メニューからロックします。\n4. 画面が明るくなるのでトレースを行います。\n5. バックキーを使用して画面のロックを解除することができます。\n\n※ロックが効いている間は最大の輝度になり、自動的に消灯しなくなりますので、バッテリ消費が激しくなります。ご了承下さい。</string>
     <string name="menu_preferences">設定</string>
     <string name="menu_view_flip_horizontal">左右反転</string>
