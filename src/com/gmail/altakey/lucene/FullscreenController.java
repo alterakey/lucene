@@ -13,7 +13,6 @@ public final class FullscreenController
 	private final Activity activity;
 	private final View view;
 
-	private Timer restyleTimer;
 	private boolean active;
 
 	private final SystemUiStyler styler = new SystemUiStyler();
