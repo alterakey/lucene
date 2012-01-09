@@ -260,7 +260,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 			{
 				this.restyle();
 			}
-			catch (HWImageView.ActivityRestartRequired e)
+			catch (ActivityRestartRequired e)
 			{
 				Log.d("VA.RS.soft", "Ignoring HWIV.ARR");
 			}
@@ -272,13 +272,13 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 			{
 				this.restyle();
 			}
-			catch (HWImageView.ActivityRestartRequired e)
+			catch (ActivityRestartRequired e)
 			{
 				this.restart();
 			}
 		}
 
-		private void restyle() throws HWImageView.ActivityRestartRequired
+		private void restyle() throws ActivityRestartRequired
 		{
 			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(ViewActivity.this);
 			boolean accelerationEnabled = pref.getBoolean(getString(R.string.config_key_enable_hardware_accel), true);
