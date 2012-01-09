@@ -152,8 +152,8 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 	{
 		int width = src.getWidth();
 		int height = src.getHeight();
-		final int maxWidth = this.view.getAcceleration().maxBitmapWidth;
-		final int maxHeight = this.view.getAcceleration().maxBitmapHeight;
+		final int maxWidth = this.view.getAcceleration().getMaximumBitmapWidth();
+		final int maxHeight = this.view.getAcceleration().getMaximumBitmapHeight();
 		if (maxWidth < 0 || maxHeight < 0)
 			return src;
 		if (width < maxWidth && height < maxHeight)

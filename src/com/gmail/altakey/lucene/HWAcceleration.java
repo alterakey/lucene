@@ -14,8 +14,8 @@ public class HWAcceleration
 	private static final int SOFTWARE = -1;
 	private static final int UNKNOWN = -2;
 		
-	public int maxBitmapWidth = UNKNOWN;
-	public int maxBitmapHeight = UNKNOWN;
+	private int maxBitmapWidth = UNKNOWN;
+	private int maxBitmapHeight = UNKNOWN;
 
 	public HWAcceleration(View view)
 	{
@@ -68,34 +68,28 @@ public class HWAcceleration
 			}
 			else
 			{
-				this.maxBitmapWidth = this.getMaximumBitmapWidth(canvas);
-				this.maxBitmapHeight = this.getMaximumBitmapHeight(canvas);
+				try
+				{
+					this.maxBitmapWidth = canvas.getMaximumBitmapWidth();
+					this.maxBitmapHeight = canvas.getMaximumBitmapHeight();
+				}
+				catch (NoSuchMethodError e)
+				{
+					this.maxBitmapWidth = 2048;
+					this.maxBitmapHeight = 2048;
+				}
 				Log.d("HWIV.HA.oD", String.format("max: (%d, %d)", this.maxBitmapWidth, this.maxBitmapHeight));
 			}
 		}
 	}
 
-	public int getMaximumBitmapWidth(Canvas canvas)
+	public int getMaximumBitmapWidth()
 	{
-		try
-		{
-			return canvas.getMaximumBitmapWidth();
-		}
-		catch (NoSuchMethodError e)
-		{
-			return 2048;
-		}
+		return this.maxBitmapWidth;
 	}
 		
-	public int getMaximumBitmapHeight(Canvas canvas)
+	public int getMaximumBitmapHeight()
 	{
-		try
-		{
-			return canvas.getMaximumBitmapHeight();
-		}
-		catch (NoSuchMethodError e)
-		{
-			return 2048;
-		}
+		return this.maxBitmapHeight;
 	}
 }
