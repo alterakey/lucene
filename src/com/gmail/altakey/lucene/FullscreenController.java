@@ -156,7 +156,7 @@ public final class FullscreenController
 								}
 								);
 						}
-					}, 1000);
+					}, 3000);
 				}
 			}
 		}
