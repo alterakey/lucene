@@ -42,14 +42,16 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
     {
         super.onCreate(savedInstanceState);
 
+		LayoutInflater li = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View root = li.inflate(R.layout.view, null);
 
-        setContentView(R.layout.view);
-
-		this.view = (HWImageView)findViewById(R.id.view);
+		this.view = (HWImageView)root.findViewById(R.id.view);
 		this.view.setImageDrawable(new ColorDrawable(0x00000000));
 
 		this.fullscreenController = new FullscreenController(this.view);
 		this.fullscreenController.onCreate();
+
+        setContentView(root);
 
 		this.adLoader = new AdLoader(this);
 		this.zc = new ZoomController(this.view);
@@ -59,7 +61,6 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
 		this.vfc = new VerticalFlipController(this.view);
 		this.gd = new GestureDetector(this, new RevertGestureListener());
 		this.sgd = new ScaleGestureDetector(this, this);
-
 
 		this.view.setImageMatrix(new Matrix());
 		this.view.setOnTouchListener(this);
