@@ -125,7 +125,7 @@ public final class FullscreenController
 			}
 		}
 
-		private class DeferredVisibilityRestorer implements View.OnSystemUiVisibilityChangeListener
+		private final class DeferredVisibilityRestorer implements View.OnSystemUiVisibilityChangeListener
 		{
 			private Timer timer;
 
