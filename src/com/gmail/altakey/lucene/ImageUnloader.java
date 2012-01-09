@@ -7,7 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 
 public final class ImageUnloader
 {
-	public static void unload(ImageView view)
+	public static void unload(final ImageView view)
 	{
 		try
 		{

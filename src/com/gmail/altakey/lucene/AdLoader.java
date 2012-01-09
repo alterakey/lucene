@@ -13,7 +13,7 @@ public final class AdLoader
 	private static final int AD_VIEW_ID = 0xdeadbeef;
 	private static final String AD_UNIT_ID = "a14ebe7748e6551";
 
-	private Activity activity;
+	private final Activity activity;
 
 	public AdLoader(Activity activity)
 	{

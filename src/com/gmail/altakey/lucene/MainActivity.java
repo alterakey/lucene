@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 
 public final class MainActivity extends Activity
 {
-	private AdLoader adLoader;
+	private final AdLoader adLoader = new AdLoader(this);
 
     /** Called when the activity is first created. */
     @Override
@@ -17,7 +17,6 @@ public final class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-		this.adLoader = new AdLoader(this);
 		this.adLoader.load();
     }
 
@@ -31,7 +30,7 @@ public final class MainActivity extends Activity
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
-		MenuInflater inflater = getMenuInflater();
+		final MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 		return true;
 	}

@@ -35,27 +35,30 @@ public final class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable
 		}
 	};
 	
-	Intent intent;
-	HWImageView view;
-	ProgressDialog progress;
-	Toast oomMessage;
-	AndroidHttpClient httpClient;
-	AsyncImageLoader.Callback cb = NullCallback;
+	private final Intent intent;
+	private final HWImageView view;
+	private final AsyncImageLoader.Callback cb;
 
-	public AsyncImageLoader(HWImageView v, Intent intent, AsyncImageLoader.Callback cb)
+	private ProgressDialog progress;
+	private Toast oomMessage;
+	private AndroidHttpClient httpClient;
+
+	public AsyncImageLoader(final HWImageView v, final Intent intent, final AsyncImageLoader.Callback cb)
 	{
 		this.view = v;
 		this.intent = intent;
 		if (cb != null)
 			this.cb = cb;
+		else
+			this.cb = NullCallback;
 	}
 
-	public static AsyncImageLoader create(HWImageView v, Intent intent)
+	public static AsyncImageLoader create(final HWImageView v, final Intent intent)
 	{
 		return create(v, intent, null);
 	}
 
-	public static AsyncImageLoader create(HWImageView v, Intent intent, AsyncImageLoader.Callback cb)
+	public static AsyncImageLoader create(final HWImageView v, final Intent intent, final AsyncImageLoader.Callback cb)
 	{
 		return new AsyncImageLoader(v, intent, cb);
 	}
@@ -113,8 +116,8 @@ public final class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable
 
 	protected BitmapDrawable doInBackground(Void... args)
 	{
-		Context context = this.view.getContext();
-		Resources res = context.getResources();
+		final Context context = this.view.getContext();
+		final Resources res = context.getResources();
 
 		try
 		{
@@ -180,18 +183,18 @@ public final class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable
 
 	private InputStream read(ProgressReportingInputStream.ProgressListener listener) throws FileNotFoundException
 	{
-		Context context = this.view.getContext();
+		final Context context = this.view.getContext();
 
 		if (Intent.ACTION_SEND.equals(this.intent.getAction()))
 		{
-			Bundle extras = this.intent.getExtras();
+			final Bundle extras = this.intent.getExtras();
 			if (extras.containsKey(Intent.EXTRA_STREAM))
 				return new ProgressReportingInputStream(context.getContentResolver().openInputStream((Uri)extras.getParcelable(Intent.EXTRA_STREAM)), listener);
 			if (extras.containsKey(Intent.EXTRA_TEXT))
 			{
 				try
 				{
-					HttpGet req = new HttpGet(extras.getCharSequence(Intent.EXTRA_TEXT).toString());
+					final HttpGet req = new HttpGet(extras.getCharSequence(Intent.EXTRA_TEXT).toString());
 					return new ProgressReportingInputStream(this.httpClient.execute(req).getEntity().getContent(), listener);
 				}
 				catch (IllegalArgumentException e)

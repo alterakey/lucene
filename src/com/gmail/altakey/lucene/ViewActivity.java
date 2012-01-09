@@ -132,9 +132,9 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
 		return true;
 	}
 
-	private void inflateMenu(Menu menu)
+	private void inflateMenu(final Menu menu)
 	{
-		MenuInflater inflater = getMenuInflater();
+		final MenuInflater inflater = getMenuInflater();
 		menu.clear();
 		inflater.inflate(this.locked ? R.menu.view_locked : R.menu.view, menu);
 	}
@@ -210,19 +210,19 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
 		return true;
 	}
 
-	public boolean onScale(ScaleGestureDetector detector)
+	public boolean onScale(final ScaleGestureDetector detector)
 	{
 		this.zc.update(detector);
 		return true;
 	}
 	
-	public boolean onScaleBegin(ScaleGestureDetector detector)
+	public boolean onScaleBegin(final ScaleGestureDetector detector)
 	{
 		this.zc.begin(detector);
 		return true;
 	}
 	
-	public void onScaleEnd(ScaleGestureDetector detector)
+	public void onScaleEnd(final ScaleGestureDetector detector)
 	{
 		this.zc.update(detector);
 		this.zc.end();
@@ -230,19 +230,19 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
 
 	private void revertTransform()
 	{
-		int imageWidth = view.getDrawable().getIntrinsicWidth();
-		int imageHeight = view.getDrawable().getIntrinsicHeight();
+		final int imageWidth = view.getDrawable().getIntrinsicWidth();
+		final int imageHeight = view.getDrawable().getIntrinsicHeight();
 
-		Matrix m = new Matrix();
+		final Matrix m = new Matrix();
 
-		RectF drawable = new RectF(0, 0, imageWidth, imageHeight);
-		RectF viewport = new RectF(0, 0, view.getWidth(), view.getHeight());
+		final RectF drawable = new RectF(0, 0, imageWidth, imageHeight);
+		final RectF viewport = new RectF(0, 0, view.getWidth(), view.getHeight());
 		m.setRectToRect(drawable, viewport, Matrix.ScaleToFit.CENTER);
 		
 		view.setImageMatrix(m);
 	}
 
-	private class RevertGestureListener extends GestureDetector.SimpleOnGestureListener
+	private final class RevertGestureListener extends GestureDetector.SimpleOnGestureListener
 	{
 		@Override
 		public boolean onDoubleTap(MotionEvent e)
@@ -252,7 +252,7 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
 		}
 	}
 
-	private class Restyler
+	private final class Restyler
 	{
 		public void soft()
 		{
@@ -280,14 +280,14 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
 
 		private void restyle() throws ActivityRestartRequired
 		{
-			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(ViewActivity.this);
-			boolean accelerationEnabled = pref.getBoolean(getString(R.string.config_key_enable_hardware_accel), true);
+			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(ViewActivity.this);
+			final boolean accelerationEnabled = pref.getBoolean(getString(R.string.config_key_enable_hardware_accel), true);
 			ViewActivity.this.view.getAcceleration().enable(accelerationEnabled);
 		}
 
 		private void restart()
 		{
-			Intent intent = ViewActivity.this.getIntent();
+			final Intent intent = ViewActivity.this.getIntent();
 			ViewActivity.this.finish();
 			ViewActivity.this.startActivity(intent);
 		}

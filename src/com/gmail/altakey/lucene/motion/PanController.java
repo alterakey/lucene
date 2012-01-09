@@ -9,17 +9,18 @@ public final class PanController
 {
 	private static final int UNLOCKED = -1;
 
-	private ImageView view;
+	private final ImageView view;
+
 	private int pointer_id = UNLOCKED;
 	private float x;
 	private float y;
 
-	public PanController(ImageView view)
+	public PanController(final ImageView view)
 	{
 		this.view = view;
 	}
 
-	public void begin(MotionEvent e)
+	public void begin(final MotionEvent e)
 	{
 		if (this.pointer_id == UNLOCKED)
 		{
@@ -30,7 +31,7 @@ public final class PanController
 		}
 	}
 
-	public void update(MotionEvent e)
+	public void update(final MotionEvent e)
 	{
 		if (this.pointer_id != UNLOCKED)
 		{
@@ -59,7 +60,7 @@ public final class PanController
 		this.y = 0.0f;
 	}
 
-	private void apply(float dx, float dy)
+	private void apply(final float dx, final float dy)
 	{
 		Matrix m = new Matrix(this.view.getImageMatrix());
 		m.postTranslate(dx, dy);

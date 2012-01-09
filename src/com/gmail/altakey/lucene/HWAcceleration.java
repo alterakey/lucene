@@ -9,7 +9,7 @@ import java.util.*;
 
 public final class HWAcceleration
 {
-	private View view;
+	private final View view;
 
 	private static final int SOFTWARE = -1;
 	private static final int UNKNOWN = -2;

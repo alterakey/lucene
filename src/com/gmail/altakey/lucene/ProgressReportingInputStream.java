@@ -13,7 +13,7 @@ public final class ProgressReportingInputStream extends FilterInputStream
 	private long position = 0;
 	private ProgressListener listener;
 
-	public ProgressReportingInputStream(InputStream in, ProgressListener listener)
+	public ProgressReportingInputStream(final InputStream in, final ProgressListener listener)
 	{
 		super(in);
 		this.listener = listener;
@@ -22,7 +22,7 @@ public final class ProgressReportingInputStream extends FilterInputStream
 	@Override
 	public int read(byte[] buffer, int offset, int count) throws IOException
 	{
-		int advanced = super.read(buffer, offset, count);
+		final int advanced = super.read(buffer, offset, count);
 		this.position += advanced;
 		this.report();
 		return advanced;

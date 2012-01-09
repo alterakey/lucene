@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 
 public final class HWImageView extends ImageView
 {
-	private HWAcceleration accel = new HWAcceleration(this);
+	private final HWAcceleration accel = new HWAcceleration(this);
 
 	public HWImageView(Context context)
 	{
@@ -31,7 +31,7 @@ public final class HWImageView extends ImageView
 		this.accel.note(canvas);
 	}
 
-	public HWAcceleration getAcceleration()
+	public final HWAcceleration getAcceleration()
 	{
 		return this.accel;
 	}

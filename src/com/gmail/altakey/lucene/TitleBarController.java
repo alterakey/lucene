@@ -6,9 +6,9 @@ import android.view.Window;
 
 public final class TitleBarController
 {
-	private Activity activity;
+	private final Activity activity;
 
-	public TitleBarController(Activity activity)
+	public TitleBarController(final Activity activity)
 	{
 		this.activity = activity;
 	}
@@ -17,7 +17,7 @@ public final class TitleBarController
 	{
 		try
 		{
-			ActionBar bar = this.activity.getActionBar();
+			final ActionBar bar = this.activity.getActionBar();
 		}
 		catch (NoSuchMethodError e)
 		{

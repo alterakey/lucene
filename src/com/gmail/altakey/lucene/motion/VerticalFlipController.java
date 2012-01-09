@@ -5,9 +5,9 @@ import android.widget.ImageView;
 
 public final class VerticalFlipController
 {
-	private ImageView view;
+	private final ImageView view;
 
-	public VerticalFlipController(ImageView view)
+	public VerticalFlipController(final ImageView view)
 	{
 		this.view = view;
 	}

@@ -5,9 +5,9 @@ import android.view.WindowManager;
 
 public final class BrightnessLock
 {
-	private Activity activity;
+	private final Activity activity;
 	
-	public BrightnessLock(Activity activity)
+	public BrightnessLock(final Activity activity)
 	{
 		this.activity = activity;
 	}
