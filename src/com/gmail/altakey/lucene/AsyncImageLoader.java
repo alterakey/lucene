@@ -118,7 +118,7 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 
 		try
 		{
-			InputStream in = this.read(new BitmapInputStream.ProgressListener() {
+			InputStream in = this.read(new ProgressReportingInputStream.ProgressListener() {
 				public void onAdvance(long at, long size)
 				{
 					publishProgress(at, size);
@@ -178,7 +178,7 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 		return this.read(null);
 	}
 
-	private InputStream read(BitmapInputStream.ProgressListener listener) throws FileNotFoundException
+	private InputStream read(ProgressReportingInputStream.ProgressListener listener) throws FileNotFoundException
 	{
 		Context context = this.view.getContext();
 
@@ -186,13 +186,13 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 		{
 			Bundle extras = this.intent.getExtras();
 			if (extras.containsKey(Intent.EXTRA_STREAM))
-				return new BitmapInputStream(context.getContentResolver().openInputStream((Uri)extras.getParcelable(Intent.EXTRA_STREAM)), listener);
+				return new ProgressReportingInputStream(context.getContentResolver().openInputStream((Uri)extras.getParcelable(Intent.EXTRA_STREAM)), listener);
 			if (extras.containsKey(Intent.EXTRA_TEXT))
 			{
 				try
 				{
 					HttpGet req = new HttpGet(extras.getCharSequence(Intent.EXTRA_TEXT).toString());
-					return new BitmapInputStream(this.httpClient.execute(req).getEntity().getContent(), listener);
+					return new ProgressReportingInputStream(this.httpClient.execute(req).getEntity().getContent(), listener);
 				}
 				catch (IllegalArgumentException e)
 				{
@@ -206,7 +206,7 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 		}
 
 		if (Intent.ACTION_VIEW.equals(this.intent.getAction()))
-			return new BitmapInputStream(context.getContentResolver().openInputStream(this.intent.getData()), listener);
+			return new ProgressReportingInputStream(context.getContentResolver().openInputStream(this.intent.getData()), listener);
 
 		return null;
 	}

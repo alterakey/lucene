@@ -2,7 +2,7 @@ package com.gmail.altakey.lucene;
 
 import java.io.*;
 
-public class BitmapInputStream extends FilterInputStream
+public class ProgressReportingInputStream extends FilterInputStream
 {
 	public interface ProgressListener
 	{
@@ -13,7 +13,7 @@ public class BitmapInputStream extends FilterInputStream
 	private long position = 0;
 	private ProgressListener listener;
 
-	public BitmapInputStream(InputStream in, ProgressListener listener)
+	public ProgressReportingInputStream(InputStream in, ProgressListener listener)
 	{
 		super(in);
 		this.listener = listener;
