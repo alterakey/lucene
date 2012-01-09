@@ -34,9 +34,9 @@ public class AdLoader
 	{
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this.activity);
 
-		if (pref.getBoolean("show_ad", true))
+		if (pref.getBoolean(this.activity.getString(R.string.config_key_show_ad), true))
 		{
-			if (locked && pref.getBoolean("hide_ad_on_lock", true))
+			if (locked && pref.getBoolean(this.activity.getString(R.string.config_key_hide_ad_on_lock), true))
 				this.hide();
 			else
 				this.show();

@@ -281,7 +281,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		private void restyle() throws HWImageView.ActivityRestartRequired
 		{
 			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(ViewActivity.this);
-			boolean accelerationEnabled = pref.getBoolean("enable_hardware_accel", true);
+			boolean accelerationEnabled = pref.getBoolean(getString(R.string.config_key_enable_hardware_accel), true);
 			ViewActivity.this.view.setHardwareAcceleration(accelerationEnabled);
 		}
 
