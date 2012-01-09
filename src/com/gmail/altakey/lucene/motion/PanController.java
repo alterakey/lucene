@@ -5,7 +5,7 @@ import android.graphics.PointF;
 import android.graphics.Matrix;
 import android.view.MotionEvent;
 
-public class PanController
+public final class PanController
 {
 	private static final int UNLOCKED = -1;
 

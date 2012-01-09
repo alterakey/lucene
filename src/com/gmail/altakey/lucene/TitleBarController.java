@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.view.Window;
 
-public class TitleBarController
+public final class TitleBarController
 {
 	private Activity activity;
 

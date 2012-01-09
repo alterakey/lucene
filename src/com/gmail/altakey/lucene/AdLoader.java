@@ -8,7 +8,7 @@ import com.google.ads.AdView;
 import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 
-public class AdLoader
+public final class AdLoader
 {
 	private static final int AD_VIEW_ID = 0xdeadbeef;
 	private static final String AD_UNIT_ID = "a14ebe7748e6551";
@@ -20,7 +20,7 @@ public class AdLoader
 		this.activity = activity;
 	}
 
-	public static AdLoader create(Activity activity)
+	public static AdLoader create(final Activity activity)
 	{
 		return new AdLoader(activity);
 	}
@@ -30,7 +30,7 @@ public class AdLoader
 		this.load(false);
 	}
 
-	public void load(boolean locked)
+	public void load(final boolean locked)
 	{
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this.activity);
 

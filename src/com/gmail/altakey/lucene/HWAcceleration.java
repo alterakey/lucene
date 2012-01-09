@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 import android.content.SharedPreferences;
 import java.util.*;
 
-public class HWAcceleration
+public final class HWAcceleration
 {
 	private View view;
 

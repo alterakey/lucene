@@ -6,7 +6,7 @@ import android.graphics.Matrix;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
-public class ZoomController
+public final class ZoomController
 {
 	private ImageView view;
 

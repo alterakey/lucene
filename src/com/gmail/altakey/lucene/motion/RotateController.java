@@ -5,7 +5,7 @@ import android.graphics.PointF;
 import android.graphics.Matrix;
 import android.view.MotionEvent;
 
-public class RotateController
+public final class RotateController
 {
 	private static final int UNLOCKED = -1;
 	private static final float UNDETERMINED = 999.0f;

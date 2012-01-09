@@ -7,7 +7,7 @@ import android.graphics.Canvas;
 import android.widget.ImageView;
 import android.util.AttributeSet;
 
-public class HWImageView extends ImageView
+public final class HWImageView extends ImageView
 {
 	private HWAcceleration accel = new HWAcceleration(this);
 

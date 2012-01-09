@@ -16,7 +16,7 @@ import android.net.http.AndroidHttpClient;
 import org.apache.http.client.methods.HttpGet;
 import java.io.*;
 
-public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
+public final class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 {
 	public interface Callback
 	{

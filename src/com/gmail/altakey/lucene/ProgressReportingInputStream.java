@@ -2,7 +2,7 @@ package com.gmail.altakey.lucene;
 
 import java.io.*;
 
-public class ProgressReportingInputStream extends FilterInputStream
+public final class ProgressReportingInputStream extends FilterInputStream
 {
 	public interface ProgressListener
 	{

@@ -1,5 +1,5 @@
 package com.gmail.altakey.lucene;
 
-public class ActivityRestartRequired extends Exception
+public final class ActivityRestartRequired extends Exception
 {
 }

@@ -3,7 +3,7 @@ package com.gmail.altakey.lucene;
 import android.app.Activity;
 import android.view.WindowManager;
 
-public class BrightnessLock
+public final class BrightnessLock
 {
 	private Activity activity;
 	

@@ -3,7 +3,7 @@ package com.gmail.altakey.lucene.motion;
 import android.graphics.Matrix;
 import android.widget.ImageView;
 
-public class HorizontalFlipController
+public final class HorizontalFlipController
 {
 	private ImageView view;
 

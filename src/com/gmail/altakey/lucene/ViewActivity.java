@@ -18,7 +18,7 @@ import com.google.ads.*;
 
 import com.gmail.altakey.lucene.motion.*;
 
-public class ViewActivity extends Activity implements View.OnTouchListener, ScaleGestureDetector.OnScaleGestureListener
+public final class ViewActivity extends Activity implements View.OnTouchListener, ScaleGestureDetector.OnScaleGestureListener
 {
 	private boolean locked;
 

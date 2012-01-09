@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 
-public class ImageUnloader
+public final class ImageUnloader
 {
 	public static void unload(ImageView view)
 	{

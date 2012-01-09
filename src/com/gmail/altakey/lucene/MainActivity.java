@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.view.*;
 import android.widget.LinearLayout;
 
-public class MainActivity extends Activity
+public final class MainActivity extends Activity
 {
 	private AdLoader adLoader;
 
