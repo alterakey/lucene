@@ -282,7 +282,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		{
 			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(ViewActivity.this);
 			boolean accelerationEnabled = pref.getBoolean(getString(R.string.config_key_enable_hardware_accel), true);
-			ViewActivity.this.view.setHardwareAcceleration(accelerationEnabled);
+			ViewActivity.this.view.getAcceleration().enable(accelerationEnabled);
 		}
 
 		private void restart()

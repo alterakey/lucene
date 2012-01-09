@@ -20,11 +20,7 @@ import com.gmail.altakey.lucene.motion.*;
 
 public class HWImageView extends ImageView
 {
-	private static final int SOFTWARE = -1;
-	private static final int UNKNOWN = -2;
-
-	public int maxBitmapWidth = UNKNOWN;
-	public int maxBitmapHeight = UNKNOWN;
+	private HWAcceleration accel = new HWAcceleration(this);
 
 	public HWImageView(Context context)
 	{
@@ -43,52 +39,34 @@ public class HWImageView extends ImageView
 	protected void onDraw(Canvas canvas)
 	{
 		super.onDraw(canvas);
-		if (this.maxBitmapWidth == UNKNOWN && this.maxBitmapHeight == UNKNOWN)
-		{
-			if (!HWAcceleration.isEnabled(this))
-			{
-				this.maxBitmapWidth = SOFTWARE;
-				this.maxBitmapHeight = SOFTWARE;
-			}
-			else
-			{
-				this.maxBitmapWidth = HWAcceleration.getMaximumBitmapWidth(canvas);
-				this.maxBitmapHeight = HWAcceleration.getMaximumBitmapHeight(canvas);
-				Log.d("HWIV.oD", String.format("max: (%d, %d)", this.maxBitmapWidth, this.maxBitmapHeight));
-			}
-		}
+		this.accel.note(canvas);
 	}
 
-	public void setHardwareAcceleration(boolean enabled) throws ActivityRestartRequired
+	public HWAcceleration getAcceleration()
 	{
-		try
-		{
-			int fromType = getLayerType();
-			int toType = enabled ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_SOFTWARE;
-			
-			if (fromType != toType)
-			{
-				if (this.maxBitmapWidth != UNKNOWN || this.maxBitmapHeight != UNKNOWN)
-					throw new ActivityRestartRequired();
-			}
-			
-			this.maxBitmapWidth = UNKNOWN;
-			this.maxBitmapHeight = UNKNOWN;
-			setLayerType(toType, null);
-			invalidate();
-		}
-		catch (NoSuchMethodError e)
-		{
-		}
+		return this.accel;
 	}
 
-	private static class HWAcceleration
+	public static class HWAcceleration
 	{
-		public static boolean isEnabled(View view)
+		private View view;
+
+		private static final int SOFTWARE = -1;
+		private static final int UNKNOWN = -2;
+		
+		public int maxBitmapWidth = UNKNOWN;
+		public int maxBitmapHeight = UNKNOWN;
+
+		public HWAcceleration(View view)
+		{
+			this.view = view;
+		}
+		
+		public boolean isEnabled()
 		{
 			try
 			{
-				return view.isHardwareAccelerated() && (view.getLayerType() != View.LAYER_TYPE_SOFTWARE);
+				return this.view.isHardwareAccelerated() && (this.view.getLayerType() != View.LAYER_TYPE_SOFTWARE);
 			}
 			catch (NoSuchMethodError e)
 			{
@@ -96,7 +74,48 @@ public class HWImageView extends ImageView
 			}
 		}
 		
-		public static int getMaximumBitmapWidth(Canvas canvas)
+		public void enable(boolean enabled) throws HWImageView.ActivityRestartRequired
+		{
+			try
+			{
+				int fromType = this.view.getLayerType();
+				int toType = enabled ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_SOFTWARE;
+				
+				if (fromType != toType)
+				{
+					if (this.maxBitmapWidth != UNKNOWN || this.maxBitmapHeight != UNKNOWN)
+						throw new HWImageView.ActivityRestartRequired();
+				}
+				
+				this.maxBitmapWidth = UNKNOWN;
+				this.maxBitmapHeight = UNKNOWN;
+				this.view.setLayerType(toType, null);
+				this.view.invalidate();
+			}
+			catch (NoSuchMethodError e)
+			{
+			}
+		}
+
+		public void note(Canvas canvas)
+		{
+			if (this.maxBitmapWidth == UNKNOWN && this.maxBitmapHeight == UNKNOWN)
+			{
+				if (!this.isEnabled())
+				{
+					this.maxBitmapWidth = SOFTWARE;
+					this.maxBitmapHeight = SOFTWARE;
+				}
+				else
+				{
+					this.maxBitmapWidth = this.getMaximumBitmapWidth(canvas);
+					this.maxBitmapHeight = this.getMaximumBitmapHeight(canvas);
+					Log.d("HWIV.HA.oD", String.format("max: (%d, %d)", this.maxBitmapWidth, this.maxBitmapHeight));
+				}
+			}
+		}
+
+		public int getMaximumBitmapWidth(Canvas canvas)
 		{
 			try
 			{
@@ -108,7 +127,7 @@ public class HWImageView extends ImageView
 			}
 		}
 		
-		public static int getMaximumBitmapHeight(Canvas canvas)
+		public int getMaximumBitmapHeight(Canvas canvas)
 		{
 			try
 			{
