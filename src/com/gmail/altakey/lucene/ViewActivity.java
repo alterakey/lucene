@@ -1,7 +1,9 @@
 package com.gmail.altakey.lucene;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.*;
@@ -252,7 +254,20 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
 		@Override
 		public boolean onDoubleTap(MotionEvent e)
 		{
-			ViewActivity.this.revertTransform();
+			AlertDialog.Builder builder = new AlertDialog.Builder(ViewActivity.this);
+			builder.setMessage(R.string.dialog_revert_message)
+				.setCancelable(false)
+				.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						ViewActivity.this.revertTransform();
+					}
+				})
+				.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+			builder.create().show();
 			return true;
 		}
 	}
