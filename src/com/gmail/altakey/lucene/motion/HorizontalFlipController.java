@@ -34,11 +34,11 @@ package com.gmail.altakey.lucene.motion;
 import android.graphics.Matrix;
 import android.widget.ImageView;
 
-public class HorizontalFlipController
+public final class HorizontalFlipController
 {
-	private ImageView view;
+	private final ImageView view;
 
-	public HorizontalFlipController(ImageView view)
+	public HorizontalFlipController(final ImageView view)
 	{
 		this.view = view;
 	}

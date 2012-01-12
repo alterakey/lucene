@@ -1,7 +1,7 @@
 README
 =======
 
-Copyright (C) 2011 Takahiro Yoshimura <altakey@gmail.com>
+Copyright (C) 2011-2012 Takahiro Yoshimura <altakey@gmail.com>
 
 This is tracing helper application for tablet devices.
 
@@ -39,13 +39,9 @@ It is available at: https://gist.github.com/1223663 .
  * Images may stick with your finger when you're finished with
    two-fingered operation (i.e. rotation/scaling)
 
- * UI is in Japanese only
-
-   Translation efforts, in any form, will be welcomed.
-
 
 3. ACKNOWLEDGES
 =================
 
-Icon is from the Blueprint Icon Set, is work of templay.de.
-(http://www.templay.de/)
+Application icon and market image resources are courtesy of Monolith
+Works Inc. design team.

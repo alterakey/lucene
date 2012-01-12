@@ -37,20 +37,20 @@ import android.graphics.Matrix;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
-public class ZoomController
+public final class ZoomController
 {
-	private ImageView view;
+	private final ImageView view;
 
-	public ZoomController(ImageView view)
+	public ZoomController(final ImageView view)
 	{
 		this.view = view;
 	}
 
-	public void begin(ScaleGestureDetector sgd)
+	public void begin(final ScaleGestureDetector sgd)
 	{
 	}
 
-	public void update(ScaleGestureDetector sgd)
+	public void update(final ScaleGestureDetector sgd)
 	{
 		float prev = sgd.getPreviousSpan();
 		float now = sgd.getCurrentSpan();
@@ -63,7 +63,7 @@ public class ZoomController
 	{
 	}
 
-	private void apply(PointF focalPoint, float ratioDelta)
+	private void apply(final PointF focalPoint, final float ratioDelta)
 	{
 		Matrix m = new Matrix(this.view.getImageMatrix());
 		m.postScale(1.0f + ratioDelta, 1.0f + ratioDelta, focalPoint.x, focalPoint.y);

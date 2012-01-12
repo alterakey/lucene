@@ -47,7 +47,7 @@ import android.net.http.AndroidHttpClient;
 import org.apache.http.client.methods.HttpGet;
 import java.io.*;
 
-public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
+public final class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 {
 	public interface Callback
 	{
@@ -66,27 +66,30 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 		}
 	};
 	
-	Intent intent;
-	HWImageView view;
-	ProgressDialog progress;
-	Toast oomMessage;
-	AndroidHttpClient httpClient;
-	AsyncImageLoader.Callback cb = NullCallback;
+	private final Intent intent;
+	private final HWImageView view;
+	private final AsyncImageLoader.Callback cb;
 
-	public AsyncImageLoader(HWImageView v, Intent intent, AsyncImageLoader.Callback cb)
+	private ProgressDialog progress;
+	private Toast oomMessage;
+	private AndroidHttpClient httpClient;
+
+	public AsyncImageLoader(final HWImageView v, final Intent intent, final AsyncImageLoader.Callback cb)
 	{
 		this.view = v;
 		this.intent = intent;
 		if (cb != null)
 			this.cb = cb;
+		else
+			this.cb = NullCallback;
 	}
 
-	public static AsyncImageLoader create(HWImageView v, Intent intent)
+	public static AsyncImageLoader create(final HWImageView v, final Intent intent)
 	{
 		return create(v, intent, null);
 	}
 
-	public static AsyncImageLoader create(HWImageView v, Intent intent, AsyncImageLoader.Callback cb)
+	public static AsyncImageLoader create(final HWImageView v, final Intent intent, final AsyncImageLoader.Callback cb)
 	{
 		return new AsyncImageLoader(v, intent, cb);
 	}
@@ -144,12 +147,12 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 
 	protected BitmapDrawable doInBackground(Void... args)
 	{
-		Context context = this.view.getContext();
-		Resources res = context.getResources();
+		final Context context = this.view.getContext();
+		final Resources res = context.getResources();
 
 		try
 		{
-			InputStream in = this.read(new BitmapInputStream.ProgressListener() {
+			InputStream in = this.read(new ProgressReportingInputStream.ProgressListener() {
 				public void onAdvance(long at, long size)
 				{
 					publishProgress(at, size);
@@ -183,8 +186,8 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 	{
 		int width = src.getWidth();
 		int height = src.getHeight();
-		final int maxWidth = this.view.maxBitmapWidth;
-		final int maxHeight = this.view.maxBitmapHeight;
+		final int maxWidth = this.view.getAcceleration().getMaximumBitmapWidth();
+		final int maxHeight = this.view.getAcceleration().getMaximumBitmapHeight();
 		if (maxWidth < 0 || maxHeight < 0)
 			return src;
 		if (width < maxWidth && height < maxHeight)
@@ -209,21 +212,21 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 		return this.read(null);
 	}
 
-	private InputStream read(BitmapInputStream.ProgressListener listener) throws FileNotFoundException
+	private InputStream read(ProgressReportingInputStream.ProgressListener listener) throws FileNotFoundException
 	{
-		Context context = this.view.getContext();
+		final Context context = this.view.getContext();
 
 		if (Intent.ACTION_SEND.equals(this.intent.getAction()))
 		{
-			Bundle extras = this.intent.getExtras();
+			final Bundle extras = this.intent.getExtras();
 			if (extras.containsKey(Intent.EXTRA_STREAM))
-				return new BitmapInputStream(context.getContentResolver().openInputStream((Uri)extras.getParcelable(Intent.EXTRA_STREAM)), listener);
+				return new ProgressReportingInputStream(context.getContentResolver().openInputStream((Uri)extras.getParcelable(Intent.EXTRA_STREAM)), listener);
 			if (extras.containsKey(Intent.EXTRA_TEXT))
 			{
 				try
 				{
-					HttpGet req = new HttpGet(extras.getCharSequence(Intent.EXTRA_TEXT).toString());
-					return new BitmapInputStream(this.httpClient.execute(req).getEntity().getContent(), listener);
+					final HttpGet req = new HttpGet(extras.getCharSequence(Intent.EXTRA_TEXT).toString());
+					return new ProgressReportingInputStream(this.httpClient.execute(req).getEntity().getContent(), listener);
 				}
 				catch (IllegalArgumentException e)
 				{
@@ -237,74 +240,8 @@ public class AsyncImageLoader extends AsyncTask<Void, Long, BitmapDrawable>
 		}
 
 		if (Intent.ACTION_VIEW.equals(this.intent.getAction()))
-			return new BitmapInputStream(context.getContentResolver().openInputStream(this.intent.getData()), listener);
+			return new ProgressReportingInputStream(context.getContentResolver().openInputStream(this.intent.getData()), listener);
 
 		return null;
-	}
-
-
-	private static class BitmapInputStream extends FilterInputStream
-	{
-		public interface ProgressListener
-		{
-			void onAdvance(long at, long length);
-		}
-
-		private int marked = 0;
-		private long position = 0;
-		private ProgressListener listener;
-
-		public BitmapInputStream(InputStream in, ProgressListener listener)
-		{
-			super(in);
-			this.listener = listener;
-		}
-
-		@Override
-		public int read(byte[] buffer, int offset, int count) throws IOException
-		{
-			int advanced = super.read(buffer, offset, count);
-			this.position += advanced;
-			this.report();
-			return advanced;
-		}
-
-		@Override
-		public synchronized void reset() throws IOException
-		{
-			super.reset();
-			this.position = this.marked;
-		}
-
-		@Override
-		public synchronized void mark(int readlimit)
-		{
-			super.mark(readlimit);
-			this.marked = readlimit;
-		}
-
-		@Override
-		public long skip(long byteCount) throws IOException
-		{
-			long advanced = super.skip(byteCount);
-			this.position += advanced;
-			this.report();
-			return advanced;
-		}
-
-		private void report()
-		{
-			if (this.listener == null)
-				return;
-
-			try
-			{
-				this.listener.onAdvance(this.position, this.position + this.in.available());
-			}
-			catch (IOException e)
-			{
-				this.listener.onAdvance(this.position, 0);
-			}
-		}
 	}
 }

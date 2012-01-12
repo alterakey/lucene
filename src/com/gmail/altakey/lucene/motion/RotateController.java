@@ -36,30 +36,31 @@ import android.graphics.PointF;
 import android.graphics.Matrix;
 import android.view.MotionEvent;
 
-public class RotateController
+public final class RotateController
 {
 	private static final int UNLOCKED = -1;
 	private static final float UNDETERMINED = 999.0f;
 
-	private ImageView view;
+	private final ImageView view;
+
 	private PointF[] points = new PointF[2];
 	private int pivot_id = UNLOCKED;
 	private int pointer_id = UNLOCKED;
 	private float angle = UNDETERMINED;
 
-	public RotateController(ImageView view)
+	public RotateController(final ImageView view)
 	{
 		this.view = view;
 		this.points[0] = new PointF();
 		this.points[1] = new PointF();
 	}
 
-	public void begin(MotionEvent e)
+	public void begin(final MotionEvent e)
 	{
 		this.down(e);
 	}
 
-	public void update(MotionEvent e)
+	public void update(final MotionEvent e)
 	{
 		if (this.pivot_id != UNLOCKED && this.pointer_id != UNLOCKED)
 		{
@@ -81,7 +82,7 @@ public class RotateController
 		}
 	}
 
-	public void down(MotionEvent e)
+	public void down(final MotionEvent e)
 	{
 		int index = e.getActionIndex();
 		int id = e.getPointerId(index);
@@ -99,7 +100,7 @@ public class RotateController
 		}
 	}
 
-	public void up(MotionEvent e)
+	public void up(final MotionEvent e)
 	{
 		int id = e.getPointerId(e.getActionIndex());
 		if (this.pivot_id == id)
@@ -122,7 +123,7 @@ public class RotateController
 		this.pointer_id = UNLOCKED;
 	}
 
-	private void apply(PointF pivot, float dtheta)
+	private void apply(final PointF pivot, float dtheta)
 	{
 		Matrix m = new Matrix(this.view.getImageMatrix());
 		if (dtheta > 270)

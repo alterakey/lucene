@@ -31,31 +31,69 @@
 
 package com.gmail.altakey.lucene;
 
-import android.app.Activity;
-import android.view.WindowManager;
+import java.io.*;
 
-public final class BrightnessLock
+public final class ProgressReportingInputStream extends FilterInputStream
 {
-	private final Activity activity;
-	
-	public BrightnessLock(final Activity activity)
+	public interface ProgressListener
 	{
-		this.activity = activity;
+		void onAdvance(long at, long length);
 	}
-	
-	public void hold()
+
+	private int marked = 0;
+	private long position = 0;
+	private ProgressListener listener;
+
+	public ProgressReportingInputStream(final InputStream in, final ProgressListener listener)
 	{
-		WindowManager.LayoutParams lp = this.activity.getWindow().getAttributes();
-		lp.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-		lp.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
-		this.activity.getWindow().setAttributes(lp);			
+		super(in);
+		this.listener = listener;
 	}
-	
-	public void release()
+
+	@Override
+	public int read(byte[] buffer, int offset, int count) throws IOException
 	{
-		WindowManager.LayoutParams lp = this.activity.getWindow().getAttributes();
-		lp.flags &= ~WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-		lp.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
-		this.activity.getWindow().setAttributes(lp);			
+		final int advanced = super.read(buffer, offset, count);
+		this.position += advanced;
+		this.report();
+		return advanced;
+	}
+
+	@Override
+	public synchronized void reset() throws IOException
+	{
+		super.reset();
+		this.position = this.marked;
+	}
+
+	@Override
+	public synchronized void mark(int readlimit)
+	{
+		super.mark(readlimit);
+		this.marked = readlimit;
+	}
+
+	@Override
+	public long skip(long byteCount) throws IOException
+	{
+		long advanced = super.skip(byteCount);
+		this.position += advanced;
+		this.report();
+		return advanced;
+	}
+
+	private void report()
+	{
+		if (this.listener == null)
+			return;
+
+		try
+		{
+			this.listener.onAdvance(this.position, this.position + this.in.available());
+		}
+		catch (IOException e)
+		{
+			this.listener.onAdvance(this.position, 0);
+		}
 	}
 }

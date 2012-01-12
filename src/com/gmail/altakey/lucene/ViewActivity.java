@@ -49,7 +49,7 @@ import com.google.ads.*;
 
 import com.gmail.altakey.lucene.motion.*;
 
-public class ViewActivity extends Activity implements View.OnTouchListener, ScaleGestureDetector.OnScaleGestureListener
+public final class ViewActivity extends Activity implements View.OnTouchListener, ScaleGestureDetector.OnScaleGestureListener
 {
 	private boolean locked;
 
@@ -63,8 +63,8 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 
 	private HWImageView view;
 	private AdLoader adLoader;
+	private FullscreenController fullscreenController;
 	private Restyler restyler = new Restyler();
-	private TitleBarController titleBarController = new TitleBarController(this);
 	private BrightnessLock brightnessLock = new BrightnessLock(this);
 
     /** Called when the activity is first created. */
@@ -73,12 +73,17 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
     {
         super.onCreate(savedInstanceState);
 
-		this.titleBarController.onCreate();
+		LayoutInflater li = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View root = li.inflate(R.layout.view, null);
 
-        setContentView(R.layout.view);
-
-		this.view = (HWImageView)findViewById(R.id.view);
+		this.view = (HWImageView)root.findViewById(R.id.view);
 		this.view.setImageDrawable(new ColorDrawable(0x00000000));
+
+		this.fullscreenController = new FullscreenController(this.view);
+		this.fullscreenController.onCreate();
+
+        setContentView(root);
+
 		this.adLoader = new AdLoader(this);
 		this.zc = new ZoomController(this.view);
 		this.pc = new PanController(this.view);
@@ -115,7 +120,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 	
 	private void lock()
 	{
-		this.titleBarController.hide();
+		this.fullscreenController.activate();
 		this.brightnessLock.hold();
 		
 		this.locked = true;
@@ -125,7 +130,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 	
 	private void unlock()
 	{
-		this.titleBarController.show();
+		this.fullscreenController.deactivate();
 		this.brightnessLock.release();
 		
 		this.locked = false;
@@ -163,9 +168,9 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		return true;
 	}
 
-	private void inflateMenu(Menu menu)
+	private void inflateMenu(final Menu menu)
 	{
-		MenuInflater inflater = getMenuInflater();
+		final MenuInflater inflater = getMenuInflater();
 		menu.clear();
 		inflater.inflate(this.locked ? R.menu.view_locked : R.menu.view, menu);
 	}
@@ -241,19 +246,19 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		return true;
 	}
 
-	public boolean onScale(ScaleGestureDetector detector)
+	public boolean onScale(final ScaleGestureDetector detector)
 	{
 		this.zc.update(detector);
 		return true;
 	}
 	
-	public boolean onScaleBegin(ScaleGestureDetector detector)
+	public boolean onScaleBegin(final ScaleGestureDetector detector)
 	{
 		this.zc.begin(detector);
 		return true;
 	}
 	
-	public void onScaleEnd(ScaleGestureDetector detector)
+	public void onScaleEnd(final ScaleGestureDetector detector)
 	{
 		this.zc.update(detector);
 		this.zc.end();
@@ -261,19 +266,19 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 
 	private void revertTransform()
 	{
-		int imageWidth = view.getDrawable().getIntrinsicWidth();
-		int imageHeight = view.getDrawable().getIntrinsicHeight();
+		final int imageWidth = view.getDrawable().getIntrinsicWidth();
+		final int imageHeight = view.getDrawable().getIntrinsicHeight();
 
-		Matrix m = new Matrix();
+		final Matrix m = new Matrix();
 
-		RectF drawable = new RectF(0, 0, imageWidth, imageHeight);
-		RectF viewport = new RectF(0, 0, view.getWidth(), view.getHeight());
+		final RectF drawable = new RectF(0, 0, imageWidth, imageHeight);
+		final RectF viewport = new RectF(0, 0, view.getWidth(), view.getHeight());
 		m.setRectToRect(drawable, viewport, Matrix.ScaleToFit.CENTER);
 		
 		view.setImageMatrix(m);
 	}
 
-	private class RevertGestureListener extends GestureDetector.SimpleOnGestureListener
+	private final class RevertGestureListener extends GestureDetector.SimpleOnGestureListener
 	{
 		@Override
 		public boolean onDoubleTap(MotionEvent e)
@@ -283,7 +288,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 		}
 	}
 
-	private class Restyler
+	private final class Restyler
 	{
 		public void soft()
 		{
@@ -291,7 +296,7 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 			{
 				this.restyle();
 			}
-			catch (HWImageView.ActivityRestartRequired e)
+			catch (ActivityRestartRequired e)
 			{
 				Log.d("VA.RS.soft", "Ignoring HWIV.ARR");
 			}
@@ -303,22 +308,22 @@ public class ViewActivity extends Activity implements View.OnTouchListener, Scal
 			{
 				this.restyle();
 			}
-			catch (HWImageView.ActivityRestartRequired e)
+			catch (ActivityRestartRequired e)
 			{
 				this.restart();
 			}
 		}
 
-		private void restyle() throws HWImageView.ActivityRestartRequired
+		private void restyle() throws ActivityRestartRequired
 		{
-			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(ViewActivity.this);
-			boolean accelerationEnabled = pref.getBoolean("enable_hardware_accel", true);
-			ViewActivity.this.view.setHardwareAcceleration(accelerationEnabled);
+			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(ViewActivity.this);
+			final boolean accelerationEnabled = pref.getBoolean(getString(R.string.config_key_enable_hardware_accel), true);
+			ViewActivity.this.view.getAcceleration().enable(accelerationEnabled);
 		}
 
 		private void restart()
 		{
-			Intent intent = ViewActivity.this.getIntent();
+			final Intent intent = ViewActivity.this.getIntent();
 			ViewActivity.this.finish();
 			ViewActivity.this.startActivity(intent);
 		}

@@ -39,19 +39,19 @@ import com.google.ads.AdView;
 import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 
-public class AdLoader
+public final class AdLoader
 {
 	private static final int AD_VIEW_ID = 0xdeadbeef;
 	private static final String AD_UNIT_ID = "a14ebe7748e6551";
 
-	private Activity activity;
+	private final Activity activity;
 
 	public AdLoader(Activity activity)
 	{
 		this.activity = activity;
 	}
 
-	public static AdLoader create(Activity activity)
+	public static AdLoader create(final Activity activity)
 	{
 		return new AdLoader(activity);
 	}
@@ -61,13 +61,13 @@ public class AdLoader
 		this.load(false);
 	}
 
-	public void load(boolean locked)
+	public void load(final boolean locked)
 	{
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this.activity);
 
-		if (pref.getBoolean("show_ad", true))
+		if (pref.getBoolean(this.activity.getString(R.string.config_key_show_ad), true))
 		{
-			if (locked && pref.getBoolean("hide_ad_on_lock", true))
+			if (locked && pref.getBoolean(this.activity.getString(R.string.config_key_hide_ad_on_lock), true))
 				this.hide();
 			else
 				this.show();
