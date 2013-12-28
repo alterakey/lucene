@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<project name="runner">
+  <property file="runner.properties" />
+
+  <!-- quick check on runner.at -->
+  <fail
+          message="runner.at is missing. Make sure to inject it through an env var"
+          unless="runner.at"
+  />
+
+  <property name="runner.dir" location="${runner.at}" />
+  <dirname property="runner.target.dir" file="${ant.file}" />
+
+  <import file="${runner.dir}/runner.xml" />
+  <import file="${runner.dir}/lint.xml" />
+  <import file="${runner.dir}/test-unit.xml" />
+  <import file="${runner.dir}/test-integration.xml" />
+  <import file="${runner.dir}/test-functional.xml" />
+  <import file="${runner.dir}/test-acceptance.xml" />
+  <import file="${runner.dir}/quick-clean.xml" />
+</project>

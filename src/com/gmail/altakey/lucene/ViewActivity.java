@@ -53,6 +53,8 @@ import com.gmail.altakey.lucene.motion.*;
 
 public final class ViewActivity extends Activity implements View.OnTouchListener, ScaleGestureDetector.OnScaleGestureListener
 {
+    private static final String KEY_MATRIX = "matrix";
+
 	private boolean locked;
 
 	private GestureDetector gd;
@@ -71,7 +73,7 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
 
     /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState)
+    public void onCreate(final Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
@@ -95,7 +97,13 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
 		this.gd = new GestureDetector(this, new RevertGestureListener());
 		this.sgd = new ScaleGestureDetector(this, this);
 
-		this.view.setImageMatrix(new Matrix());
+        if (savedInstanceState == null) {
+            this.view.setImageMatrix(new Matrix());
+        } else {
+            final MatrixBundler bundler = (MatrixBundler)savedInstanceState.getParcelable(KEY_MATRIX);
+            Log.d("VA", String.format("matrix: %s", bundler.getMatrix()));
+            this.view.setImageMatrix(bundler.getMatrix());
+        }
 		this.view.setOnTouchListener(this);
 		this.restyler.soft();
 
@@ -103,7 +111,9 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
 		AsyncImageLoader.create(this.view, this.getIntent(), new AsyncImageLoader.Callback() {
 			public void onComplete()
 			{
-				ViewActivity.this.revertTransform();
+                if (savedInstanceState == null) {
+                    ViewActivity.this.revertTransform();
+                }
 			}
 			public void onError()
 			{
@@ -154,6 +164,12 @@ public final class ViewActivity extends Activity implements View.OnTouchListener
 		super.onDestroy();
 		ImageUnloader.unload(this.view);
 	}
+
+    @Override
+    public void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(KEY_MATRIX, new MatrixBundler(this.view.getImageMatrix()));
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
