@@ -11,6 +11,7 @@
     <string name="menu_view_lock">ロック</string>
     <string name="menu_view_unlock">ロック解除</string>
     <string name="menu_view_close">アプリの終了</string>
+    <string name="dialog_revert_message">最初の状態へ復帰しますか？</string>
     <string name="toast_locked">ロックしました。\nバックキーまたはメニューから解除できます。</string>
     <string name="toast_unlocked">ロックを解除しました。</string>
     <string name="toast_out_of_memory">画像が大きすぎて取り扱えません。</string>
